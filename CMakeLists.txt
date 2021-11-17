@@ -1,6 +1,8 @@
 cmake_minimum_required( VERSION 3.1)
 
 project( MulleUI C)
+add_definitions( -DMULLE_UI_EXTERN_GLOBAL=extern)
+
 #
 # Turn a "Library" into an "Executable"
 # * touch src/main.m
