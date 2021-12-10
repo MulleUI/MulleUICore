@@ -1,7 +1,52 @@
 # MulleUI
 
-#### 🌀 UIKit for mulle-objc - Desktop and Mobile
+#### 🌀 UI for mulle-objc - Desktop and Mobile
 
+This library ties all sublibraries together and adds conveniences. With
+MulleUI you can create windows with **UIWindow**, structure the window content
+with **UIView** handle events as **UIEvents** in your **UIView**. Your
+drawing code will likely reside in **CALayers**, that will utilize a platform
+specific drawing library variant of **nanovg**. Your layers can be easily
+animated with **CAAnimation**.
+
+This library does not provide any widgets or concrete layers. (See:
+MulleUIKit for that)
+
+
+### You are here
+
+```
+  .===========================================================.
+  | MulleUI                                                   |
+  '==========================================================='
+  .-----------------------------------------------------------.
+  | MulleUIOS                                                 |
+  '-----------------------------------------------------------'
+  .-----------..---------..-----------------------------------.
+  | MulleGLFW || MulleCG || MulleUICore                       |
+  '-----------''---------''-----------------------------------'
+                          .----------------.
+                          | mulle-quadtree |
+                          '----------------'
+  .------------------------------------------------..---------.
+  | MulleUIView                                    || MulleCA |
+  '------------------------------------------------''---------'
+                                    .--------------.
+                                    | mulle-layout |
+                                    '--------------'
+  .--------------------------------.
+  | MulleUIBase                    |
+  '--------------------------------'
+  .--------------------------------.
+  | mulle-framebuffer              |
+  '--------------------------------'
+  .----------------------..------------------------.
+  | mulle-bitmap         || mulle-geometry         |
+  '----------------------''------------------------'
+                          .------------------------.
+                          | mulle-time             |
+                          '------------------------'
+```
 
 
 ## Add

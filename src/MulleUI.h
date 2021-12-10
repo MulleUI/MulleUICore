@@ -34,4 +34,7 @@ extern uint32_t   MulleUI_get_version( void);
    Add your library headers here for exposure to library
    consumers.
 */
-// #import "MyClass.h"
+
+#import "_MulleUI-export.h"
+
+#include "_MulleUI-provide.h"

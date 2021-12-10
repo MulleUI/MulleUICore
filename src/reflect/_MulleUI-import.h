@@ -12,52 +12,16 @@
  */
 
 // You can tweak the following #import with these commands.
-// (Use 5A35EA8B-60BA-49A8-A29A-6481F4FEAABD instead of MulleFoundation if there are duplicate entries)
-//    remove:             `mulle-sourcetree mark MulleFoundation no-header`
-//    rename:             `mulle-sde dependency|library set MulleFoundation include whatever.h`
-//    reorder:            `mulle-sourcetree move MulleFoundation <up|down>`
-//    toggle #import:     `mulle-sourcetree mark MulleFoundation [no-]import`
-//    toggle public:      `mulle-sourcetree mark MulleFoundation [no-]public`
-//    toggle optional:    `mulle-sourcetree mark MulleFoundation [no-]require`
-//    remove for platform:`mulle-sourcetree mark MulleFoundation no-platform-<uname>`
-//        (use mulle-sourcetree-to-c --unames for known values)
-#import <MulleFoundation/MulleFoundation.h>   // MulleFoundation
-
-// You can tweak the following #import with these commands.
-// (Use 50637326-05FD-44F5-A484-2BBF639D683D instead of MulleUIFoundation if there are duplicate entries)
-//    remove:             `mulle-sourcetree mark MulleUIFoundation no-header`
-//    rename:             `mulle-sde dependency|library set MulleUIFoundation include whatever.h`
-//    reorder:            `mulle-sourcetree move MulleUIFoundation <up|down>`
-//    toggle #import:     `mulle-sourcetree mark MulleUIFoundation [no-]import`
-//    toggle public:      `mulle-sourcetree mark MulleUIFoundation [no-]public`
-//    toggle optional:    `mulle-sourcetree mark MulleUIFoundation [no-]require`
-//    remove for platform:`mulle-sourcetree mark MulleUIFoundation no-platform-<uname>`
-//        (use mulle-sourcetree-to-c --unames for known values)
-#import <MulleUIFoundation/MulleUIFoundation.h>   // MulleUIFoundation
-
-// You can tweak the following #import with these commands.
-// (Use 2A2C6C90-F3C7-44CC-95A3-1B541067E63F instead of MulleGraphicsJS if there are duplicate entries)
-//    remove:             `mulle-sourcetree mark MulleGraphicsJS no-header`
-//    rename:             `mulle-sde dependency|library set MulleGraphicsJS include whatever.h`
-//    reorder:            `mulle-sourcetree move MulleGraphicsJS <up|down>`
-//    toggle #import:     `mulle-sourcetree mark MulleGraphicsJS [no-]import`
-//    toggle public:      `mulle-sourcetree mark MulleGraphicsJS [no-]public`
-//    toggle optional:    `mulle-sourcetree mark MulleGraphicsJS [no-]require`
-//    remove for platform:`mulle-sourcetree mark MulleGraphicsJS no-platform-<uname>`
-//        (use mulle-sourcetree-to-c --unames for known values)
-#import <MulleGraphicsJS/MulleGraphicsJS.h>   // MulleGraphicsJS
-
-// You can tweak the following #import with these commands.
-// (Use 5571DB3E-9642-494A-B0F3-00786BC5C129 instead of MulleUIImage if there are duplicate entries)
-//    remove:             `mulle-sourcetree mark MulleUIImage no-header`
-//    rename:             `mulle-sde dependency|library set MulleUIImage include whatever.h`
-//    reorder:            `mulle-sourcetree move MulleUIImage <up|down>`
-//    toggle #import:     `mulle-sourcetree mark MulleUIImage [no-]import`
-//    toggle public:      `mulle-sourcetree mark MulleUIImage [no-]public`
-//    toggle optional:    `mulle-sourcetree mark MulleUIImage [no-]require`
-//    remove for platform:`mulle-sourcetree mark MulleUIImage no-platform-<uname>`
-//        (use mulle-sourcetree-to-c --unames for known values)
-#import <MulleUIImage/MulleUIImage.h>   // MulleUIImage
+// (Use BF4EC19F-DA58-45CB-A738-983748A7F16C instead of MulleUIOS if there are duplicate entries)
+//    remove:             `mulle-sde dependency mark MulleUIOS no-header`
+//    rename:             `mulle-sde dependency|library set MulleUIOS include whatever.h`
+//    reorder:            `mulle-sde dependency move MulleUIOS <up|down>`
+//    toggle #import:     `mulle-sde dependency mark MulleUIOS [no-]import`
+//    toggle public:      `mulle-sde dependency mark MulleUIOS [no-]public`
+//    toggle optional:    `mulle-sde dependency mark MulleUIOS [no-]require`
+//    remove for platform:`mulle-sde dependency mark MulleUIOS no-platform-<uname>`
+//        (use `mulle-sourcetree-to-c --unames` to list known values)
+#import <MulleUIOS/MulleUIOS.h>   // MulleUIOS
 
 #ifdef __has_include
 # if __has_include( "_MulleUI-include.h")
