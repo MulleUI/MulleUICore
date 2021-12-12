@@ -74,7 +74,9 @@
 
 /* Prototypes */
 void init( void );
-static void   display( UIWindow *gWindow, CAAbsoluteTime now);
+static void   display( UIWindow *uiWindow,
+                       id <UIOSGraphicsContext> context,
+                       struct CGFrameInfo *info);
 void reshape( GLFWwindow* window, int w, int h );
 void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods );
 void mouse_button_callback( GLFWwindow* window, int button, int action, int mods );
@@ -550,8 +552,14 @@ void   init( void )
 /*****************************************************************************
  * display()
  *****************************************************************************/
-static void   display( UIWindow *uiWindow, CAAbsoluteTime now)
+static void   display( UIWindow *uiWindow,
+                       id <UIOSGraphicsContext> context,
+                       struct CGFrameInfo *info)
 {
+   t = info->animationNow;
+   dt = t - t_old;
+   t_old = t;
+
    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
    glPushMatrix();
 
@@ -762,37 +770,21 @@ int main( void )
 
       [uiWindow setScrollWheelSensitivity:1.0];
 
-      [uiWindow os_activateContext];
+      [uiWindow os_activateGraphicsContext];
       [uiWindow os_setSwapInterval:1];
 
       framebufferSize = [uiWindow os_framebufferSize];
       reshape( window, framebufferSize.width, framebufferSize.height);
 
-      glfwSetTime( 0.0 );
+      glfwSetTime( 0.0);
 
       init();
 
-      /* Main loop */
-      for (;;)
-      {
-          /* Timing */
-          t = glfwGetTime();
-          dt = t - t_old;
-          t_old = t;
+      [uiWindow os_deactivateGraphicsContext];
 
-          /* Draw one frame */
-          display( uiWindow, t);
-
-          /* Swap buffers */
-          glfwSwapBuffers(window);
-          glfwPollEvents();
-
-          /* Check if we are still running */
-          if (glfwWindowShouldClose(window))
-              break;
-      }
-   //   [gWindow setRenderCallback:display];
-   //   [gWindow renderLoopHz:100.0];
+      [uiWindow setFrameCallback:display];
+      [uiWindow setFrameRateHz:100.0];
+      [uiWindow frameLoop];
    }
    return( [app terminate]);
 }

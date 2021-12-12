@@ -27,7 +27,7 @@
                       titleUTF8String:title];
    [window setFrameRateHz:hz];
    [self addWindow:window];
-   [window renderLoop];
+   [window frameLoop];
 }
 
 

@@ -755,7 +755,7 @@ int main( void )
       [gWindow setWindowEventsCallback:receiveWindowEvents];
       [gWindow setOtherEventsCallback:receiveOtherEvents];
 
-      [gWindow os_activateContext];
+      [gWindow os_activateGraphicsContext];
       [gWindow os_setSwapInterval:1];
 
       framebufferSize = [gWindow os_framebufferSize];
@@ -785,7 +785,7 @@ int main( void )
               break;
       }
    //   [gWindow setRenderCallback:display];
-   //   [gWindow renderLoopHz:100.0];
+   //   [gWindow frameLoopHz:100.0];
    }
    return( [app terminate]);
 }
