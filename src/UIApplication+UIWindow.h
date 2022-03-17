@@ -4,6 +4,9 @@
 #import "import.h"
 
 
+// TODO: rename CALayerDrawCallback_t to UIDrawCallback, pass
+//       id <UILayer> and CGContex ?
+
 @interface UIApplication( UIWindow)
 
 //
@@ -15,16 +18,16 @@
 // be this size too. Otherwise the drawing will be scaled to fit
 // the windowSize
 //
-- (void) runWindowForDrawCallback:(CALayerDrawCallback_t) callback
-                       canvasSize:(CGSize) canvasSize
-                       windowSize:(CGSize) windowSize
-                  titleUTF8String:(char *) title
-                      frameRateHz:(CGFloat) hz;
+- (int) runWindowForDrawCallback:(CALayerDrawCallback_t *) callback
+                      canvasSize:(CGSize) canvasSize
+                      windowSize:(CGSize) windowSize
+                 titleUTF8String:(char *) title
+                     frameRateHz:(CGFloat) hz;
 
 // even more convenient...
-+ (void) runWindowForDrawCallback:(CALayerDrawCallback_t) callback
-                       canvasSize:(CGSize) canvasSize
-                       windowSize:(CGSize) windowSize
-                  titleUTF8String:(char *) title
-                      frameRateHz:(CGFloat) hz;
++ (int) runWindowForDrawCallback:(CALayerDrawCallback_t *) callback
+                      canvasSize:(CGSize) canvasSize
+                      windowSize:(CGSize) windowSize
+                 titleUTF8String:(char *) title
+                     frameRateHz:(CGFloat) hz;
 @end

@@ -2,51 +2,26 @@
 
 #### 🌀 UI for mulle-objc - Desktop and Mobile
 
-This library ties all sublibraries together and adds conveniences. With
-MulleUI you can create windows with **UIWindow**, structure the window content
-with **UIView** handle events as **UIEvents** in your **UIView**. Your
-drawing code will likely reside in **CALayers**, that will utilize a platform
-specific drawing library variant of **nanovg**. Your layers can be easily
-animated with **CAAnimation**.
+This library adds some convenience atop of MulleUIOS. It is the main starting
+apoint for developing MulleUI code.
 
-This library does not provide any widgets or concrete layers. (See:
-MulleUIKit for that)
+With MulleUI you can
+
+* create windows with **UIWindow**
+* layout window contents with **UIView**
+* handle events as an **UIEvent** in your UIView
+* do drawings in your UIView with **CALayer**
+* animate your UIView or CALayer with **CAAnimation**
+
+MulleUI will utilize a platform specific drawing library variant of **nanovg**.
+
+This library does not provide any widgets. See MulleUIKit for that.
 
 
 ### You are here
 
-```
-  .===========================================================.
-  | MulleUI                                                   |
-  '==========================================================='
-  .-----------------------------------------------------------.
-  | MulleUIOS                                                 |
-  '-----------------------------------------------------------'
-  .-----------..---------..-----------------------------------.
-  | MulleGLFW || MulleCG || MulleUICore                       |
-  '-----------''---------''-----------------------------------'
-                          .----------------.
-                          | mulle-quadtree |
-                          '----------------'
-  .------------------------------------------------..---------.
-  | MulleUIView                                    || MulleCA |
-  '------------------------------------------------''---------'
-                                    .--------------.
-                                    | mulle-layout |
-                                    '--------------'
-  .--------------------------------.
-  | MulleUIBase                    |
-  '--------------------------------'
-  .--------------------------------.
-  | mulle-framebuffer              |
-  '--------------------------------'
-  .----------------------..------------------------.
-  | mulle-bitmap         || mulle-geometry         |
-  '----------------------''------------------------'
-                          .------------------------.
-                          | mulle-time             |
-                          '------------------------'
-```
+![Overview](overview.dot.svg)
+
 
 
 ## Add

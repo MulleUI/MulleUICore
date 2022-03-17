@@ -1,0 +1,4 @@
+GRAPH_MAX_LEVEL=3
+GRAPH_DEDUPE=NO
+GRAPH_DIRECTION=LR
+GRAPH_HEADER='glfw [ fillcolor="goldenrod" ];'

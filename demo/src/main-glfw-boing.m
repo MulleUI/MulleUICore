@@ -75,7 +75,7 @@
 
 /* Prototypes */
 void init( void );
-static void   display( GLFWOSWindow *gWindow, CAAbsoluteTime now);
+static void   display( GLFWOSWindow *gWindow, mulle_absolutetime_t now);
 void reshape( GLFWwindow* window, int w, int h );
 void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods );
 void mouse_button_callback( GLFWwindow* window, int button, int action, int mods );
@@ -551,7 +551,7 @@ void   init( void )
 /*****************************************************************************
  * display()
  *****************************************************************************/
-static void   display( GLFWOSWindow *gWindow, CAAbsoluteTime now)
+static void   display( GLFWOSWindow *gWindow, mulle_absolutetime_t now)
 {
    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
    glPushMatrix();
@@ -753,7 +753,7 @@ int main( void )
 
       [gWindow setScrollWheelSensitivity:1.0];
       [gWindow setWindowEventsCallback:receiveWindowEvents];
-      [gWindow setOtherEventsCallback:receiveOtherEvents];
+      [gWindow setOtherRetainedEventsCallback:receiveOtherEvents];
 
       [gWindow os_activateGraphicsContext];
       [gWindow os_setSwapInterval:1];
@@ -784,10 +784,9 @@ int main( void )
           if (glfwWindowShouldClose(window))
               break;
       }
-   //   [gWindow setRenderCallback:display];
-   //   [gWindow frameLoopHz:100.0];
+      [window frameLoop:UIWindowFrameRateSynced];
    }
-   return( [app terminate]);
+   return( [app run]);
 }
 
 

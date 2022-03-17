@@ -75,7 +75,7 @@
 /* Prototypes */
 void init( void );
 static void   display( UIWindow *uiWindow,
-                       id <UIOSGraphicsContext> context,
+                       id <UIGraphicsContext> context,
                        struct CGFrameInfo *info);
 void reshape( GLFWwindow* window, int w, int h );
 void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods );
@@ -553,10 +553,10 @@ void   init( void )
  * display()
  *****************************************************************************/
 static void   display( UIWindow *uiWindow,
-                       id <UIOSGraphicsContext> context,
+                       id <UIGraphicsContext> context,
                        struct CGFrameInfo *info)
 {
-   t = info->animationNow;
+   t = info->now;
    dt = t - t_old;
    t_old = t;
 
@@ -747,8 +747,7 @@ int main( void )
 
    @autoreleasepool
    {
-      styleMask = (UIWindowStyleDecorated\
-                  |UIWindowStyleResizable\
+      styleMask = (UIWindowStyleResizable\
                   |UIWindowOpenGLLibraryFallback
                   |UIWindowOpenGLDeprecated);
       uiWindow = [UIWindow windowWithFrame:CGRectMake( 0, 0 , 400, 400)
@@ -782,7 +781,7 @@ int main( void )
 
       [uiWindow os_deactivateGraphicsContext];
 
-      [uiWindow setFrameCallback:display];
+      [uiWindow setRenderFrameCallback:display];
       [uiWindow setFrameRateHz:100.0];
       [uiWindow frameLoop];
    }
