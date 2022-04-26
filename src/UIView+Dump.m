@@ -51,13 +51,14 @@
    for( i = 0; i < indent; i++)
       fputc( ' ', stderr);
 
-   fprintf( stderr, "%s: f=[%s] b=[%s] r=[%s]",
+   fprintf( stderr, "%s: frame=[%s] bounds=[%s] clip=[%s]",
                [self UTF8String],
                CGRectUTF8String( [self frame]),
                CGRectUTF8String( [self bounds]),
                CGRectUTF8String( [self clipRect]));
    if( [self masksToBounds])
       fprintf ( stderr, " masks");
+
    fprintf( stderr, "\n");
 }
 
@@ -100,6 +101,7 @@
 - (void) dumpWithIndent:(NSUInteger) indent
 {
    NSUInteger   i;
+   char         *s;
 
    for( i = 0; i < indent; i++)
       fputc( ' ', stderr);
@@ -115,6 +117,11 @@
                   CGRectUTF8String( [self bounds]));
       if( [self clipsToBounds])
          fprintf ( stderr, " clips");
+
+      s = UIViewAutoresizingMaskShortUTF8String( [self autoresizingMask]);
+      if( *s)
+         fprintf ( stderr, " %s", s);
+
       fprintf( stderr, "\n");
    }
 #ifdef DUMP_LAYERS

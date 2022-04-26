@@ -39,5 +39,9 @@
 // maus grau :) -> Loriot Eheberatung
 + (CGColor) underPageBackgroundColor  { return( CGColorMakeWithHexColor( 0x6b716fFF)); }
 + (CGColor ) colorWithCGColor:(CGColor) cgColor  { return( cgColor); }
++ (CGColor) colorWithUTF8String:(char *) name
+{
+   return( CGColorMakeWithUTF8String( name));
+}
 
 @end

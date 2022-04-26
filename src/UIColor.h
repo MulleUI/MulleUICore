@@ -27,6 +27,7 @@
 
 + (CGColor) underPageBackgroundColor;
 + (CGColor) colorWithCGColor:(CGColor) cgColor;
++ (CGColor) colorWithUTF8String:(char *) name;
 
 
 @end
