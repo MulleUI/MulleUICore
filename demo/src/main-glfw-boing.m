@@ -668,7 +668,7 @@ void   cursor_position_callback( GLFWwindow* window, double x, double y )
 
 static void   receiveWindowEvents( GLFWOSWindow *window, UIWindowEvent *event)
 {
-   struct CGBitmapSize   size;
+   struct MulleIntegerSize   size;
 
    switch( [event windowEventType])
    {
@@ -694,7 +694,7 @@ static void   receiveOtherEvents( GLFWOSWindow *window, UIEvent *event)
                     [(UIKeyboardEvent *) event key],
                     [(UIKeyboardEvent *) event scanCode],
                     [(UIKeyboardEvent *) event action],
-                    [(UIKeyboardEvent *) event modifiers]);
+                    [(UIKeyboardEvent *) event keyModifiers]);
       break;
 
    case UIEventTypeMotion  :
@@ -708,7 +708,7 @@ static void   receiveOtherEvents( GLFWOSWindow *window, UIEvent *event)
       mouse_button_callback( [window os_window],
                              [(UIMouseButtonEvent *) event button],
                              [(UIMouseButtonEvent *) event action],
-                             [(UIMouseButtonEvent *) event modifiers]);
+                             [(UIMouseButtonEvent *) event keyModifiers]);
       break;
 
    default  : break;
@@ -725,7 +725,7 @@ int main( void )
    GLFWOSWindow         *gWindow;
    GLFWwindow           *window;
    UIApplication        *app;
-   struct CGBitmapSize  framebufferSize;
+   struct MulleIntegerSize  framebufferSize;
    NSUInteger           styleMask;
 
    /* Init GLFW */

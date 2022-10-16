@@ -5,17 +5,17 @@
 
 #import "import-private.h"
 
-@implementation UIApplication( UIWindow)
 
-- (int) runWindowForDrawCallback:(CALayerDrawCallback_t *) callback
-                      canvasSize:(CGSize) canvasSize
-                      windowSize:(CGSize) windowSize
-                 titleUTF8String:(char *) title
-                     frameRateHz:(CGFloat) hz
+int  UIApplicationRunDrawCallback( CALayerDrawCallback_t *callback,
+                                   CGSize canvasSize, 
+                                   CGSize windowSize, 
+                                   char *title,
+                                   CGFloat frameRate)
 {
    CALayer    *layer;
    UIWindow   *window;
 
+   
    if( windowSize.width == 0.0)
       windowSize = canvasSize;
 
@@ -23,34 +23,14 @@
    [layer setBounds:CGRectMake( 0, 0, canvasSize.width, canvasSize.height)];
    [layer setCanvas:CGRectMake( 0, 0, canvasSize.width, canvasSize.height)];
    [layer setDrawCallback:callback];
+
+   // need this for UIWindow to work, since it initializes glwf/SDL
+   [UIApplication sharedInstance];
+
    window = [UIWindow windowWithLayer:layer
                       titleUTF8String:title];
-   [window setFrameRateHz:hz];
-   [self addWindow:window];
+   [window setFrameRate:frameRate];
 
-   return( [self run]);
+   return( UIApplicationRunWindow( window));
 }
 
-
-+ (int) runWindowForDrawCallback:(CALayerDrawCallback_t *) callback
-                      canvasSize:(CGSize) canvasSize
-                      windowSize:(CGSize) windowSize
-                 titleUTF8String:(char *) title
-                     frameRateHz:(CGFloat) hz
-{
-   UIApplication   *app;
-   int             rval;
-
-   app = [self sharedInstance];
-   @autoreleasepool
-   {
-      rval = [app runWindowForDrawCallback:callback
-                                canvasSize:canvasSize
-                                windowSize:windowSize
-                           titleUTF8String:title
-                               frameRateHz:hz];
-   }
-   return( rval);
-}
-
-@end

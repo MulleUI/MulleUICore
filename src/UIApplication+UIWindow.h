@@ -4,30 +4,27 @@
 #import "import.h"
 
 
-// TODO: rename CALayerDrawCallback_t to UIDrawCallback, pass
-//       id <UILayer> and CGContex ?
+int  UIApplicationRunDrawCallback( CALayerDrawCallback_t *callback,
+                                    CGSize canvasSize, 
+                                    CGSize windowSize, 
+                                    char *title,
+                                    CGFloat frameRate);
 
-@interface UIApplication( UIWindow)
+// even simpler and more convenient
+static inline int  
+     UIApplicationRunDrawCallbackHz( CALayerDrawCallback_t *callback,
+                                     CGSize canvasSize, 
+                                     char *title,
+                                     CGFloat hz)
+{
+   CGFloat    frameRate;
 
-//
-// This method  creates a window to display what "callback" draws and runs
-// the window until it is closed.
-//
-// The canvasSize is the unscaled size of your drawing, let say
-// 320x200. If the windowSize is left to zero, then the window will
-// be this size too. Otherwise the drawing will be scaled to fit
-// the windowSize
-//
-- (int) runWindowForDrawCallback:(CALayerDrawCallback_t *) callback
-                      canvasSize:(CGSize) canvasSize
-                      windowSize:(CGSize) windowSize
-                 titleUTF8String:(char *) title
-                     frameRateHz:(CGFloat) hz;
-
-// even more convenient...
-+ (int) runWindowForDrawCallback:(CALayerDrawCallback_t *) callback
-                      canvasSize:(CGSize) canvasSize
-                      windowSize:(CGSize) windowSize
-                 titleUTF8String:(char *) title
-                     frameRateHz:(CGFloat) hz;
-@end
+   if( hz == 0.0)
+      frameRate = UIWindowFrameRateAsync;
+   else
+      if( hz < 0.0)
+         frameRate = UIWindowFrameRateSynced;
+      else
+         frameRate = 1.0f / hz;      
+   return( UIApplicationRunDrawCallback( callback, canvasSize, canvasSize, title, frameRate));
+}

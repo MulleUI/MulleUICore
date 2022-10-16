@@ -11,5 +11,6 @@ endif()
 # contents selected with patternfile ??-source--sources
 #
 set( SOURCES
+src/main-glfw-boing.m
 src/main-ui-boing.m
 )

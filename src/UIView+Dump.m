@@ -72,13 +72,10 @@
    struct mulle_pointerarrayenumerator   rover;
    UIView                                 *view;
 
-   if( _subviews)
-   {
-      rover = mulle_pointerarray_enumerate( _subviews);
-      while( _mulle_pointerarrayenumerator_next( &rover, (void **) &view))
-         [view dumpWithIndent:indent];
-      mulle_pointerarrayenumerator_done( &rover);
-   }
+   rover = mulle_pointerarray_enumerate( &_subviews);
+   while( _mulle_pointerarrayenumerator_next( &rover, (void **) &view))
+      [view dumpWithIndent:indent];
+   mulle_pointerarrayenumerator_done( &rover);
 }
 
 
@@ -88,13 +85,11 @@
    CALayer                               *layer;
 
    [(CALayer *) _mainLayer dumpWithIndent:indent];
-   if( _layers)
-   {
-      rover = mulle_pointerarray_enumerate( _layers);
-      while( _mulle_pointerarrayenumerator_next( &rover, (void **) &layer))
-         [layer dumpWithIndent:indent];
-      mulle_pointerarrayenumerator_done( &rover);
-   }
+
+   rover = mulle_pointerarray_enumerate( &_layers);
+   while( _mulle_pointerarrayenumerator_next( &rover, (void **) &layer))
+      [layer dumpWithIndent:indent];
+   mulle_pointerarrayenumerator_done( &rover);
 }
 
 
@@ -117,6 +112,8 @@
                   CGRectUTF8String( [self bounds]));
       if( [self clipsToBounds])
          fprintf ( stderr, " clips");
+      if( [self isUserInteractionEnabled])
+         fprintf ( stderr, " interactive");
 
       s = UIViewAutoresizingMaskShortUTF8String( [self autoresizingMask]);
       if( *s)
