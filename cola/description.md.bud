@@ -1,0 +1,21 @@
+
+# MulleUI
+
+#### 🌀 UI for mulle-objc - Desktop and Mobile
+
+This library adds some convenience atop of MulleUIOS. It is the main starting
+apoint for developing MulleUI code.
+
+With MulleUI you can
+
+* create windows with **UIWindow**
+* layout window contents with **UIView**
+* handle events as an **UIEvent** in your UIView
+* do drawings in your UIView with **CALayer**
+* animate your UIView or CALayer with **CAAnimation**
+
+MulleUI will utilize a platform specific drawing library variant of **nanovg**.
+
+This library does not provide any widgets. See MulleUIKit for that.
+
+

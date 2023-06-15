@@ -15,6 +15,7 @@ endif()
 # Generated from sourcetree: A25F7A71-9E9A-40C9-80C1-B896DC72D33A;MulleObjC;no-singlephase;
 # Disable with : `mulle-sourcetree mark MulleObjC no-link`
 # Disable for this platform: `mulle-sourcetree mark MulleObjC no-cmake-platform-${MULLE_UNAME}`
+# Disable for a sdk: `mulle-sourcetree mark MulleObjC no-cmake-sdk-<name>`
 #
 if( NOT MULLE_OBJC_LIBRARY)
    find_library( MULLE_OBJC_LIBRARY NAMES ${CMAKE_STATIC_LIBRARY_PREFIX}MulleObjC${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX} ${CMAKE_STATIC_LIBRARY_PREFIX}MulleObjC${CMAKE_STATIC_LIBRARY_SUFFIX} MulleObjC NO_CMAKE_SYSTEM_PATH NO_SYSTEM_ENVIRONMENT_PATH)
@@ -28,11 +29,7 @@ if( NOT MULLE_OBJC_LIBRARY)
       # Add MULLE_OBJC_LIBRARY to ALL_LOAD_DEPENDENCY_LIBRARIES list.
       # Disable with: `mulle-sourcetree mark MulleObjC no-cmake-add`
       #
-      set( ALL_LOAD_DEPENDENCY_LIBRARIES
-         ${ALL_LOAD_DEPENDENCY_LIBRARIES}
-         ${MULLE_OBJC_LIBRARY}
-         CACHE INTERNAL "need to cache this"
-      )
+      list( APPEND ALL_LOAD_DEPENDENCY_LIBRARIES ${MULLE_OBJC_LIBRARY})
       #
       # Inherit information from dependency.
       # Encompasses: no-cmake-searchpath,no-cmake-dependency,no-cmake-loader
@@ -43,28 +40,25 @@ if( NOT MULLE_OBJC_LIBRARY)
       get_filename_component( _TMP_MULLE_OBJC_ROOT "${_TMP_MULLE_OBJC_ROOT}" DIRECTORY)
       #
       #
-      # Search for "DependenciesAndLibraries.cmake" to include.
+      # Search for "Definitions.cmake" and "DependenciesAndLibraries.cmake" to include.
       # Disable with: `mulle-sourcetree mark MulleObjC no-cmake-dependency`
       #
       foreach( _TMP_MULLE_OBJC_NAME "MulleObjC")
          set( _TMP_MULLE_OBJC_DIR "${_TMP_MULLE_OBJC_ROOT}/include/${_TMP_MULLE_OBJC_NAME}/cmake")
          # use explicit path to avoid "surprises"
-         if( EXISTS "${_TMP_MULLE_OBJC_DIR}/DependenciesAndLibraries.cmake")
-            unset( MULLE_OBJC_DEFINITIONS)
+         if( IS_DIRECTORY "${_TMP_MULLE_OBJC_DIR}")
             list( INSERT CMAKE_MODULE_PATH 0 "${_TMP_MULLE_OBJC_DIR}")
             #
-            include( "${_TMP_MULLE_OBJC_DIR}/DependenciesAndLibraries.cmake")
-            #
+            include( "${_TMP_MULLE_OBJC_DIR}/DependenciesAndLibraries.cmake" OPTIONAL)
             #
             list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_MULLE_OBJC_DIR}")
-            set( INHERITED_DEFINITIONS
-               ${INHERITED_DEFINITIONS}
-               ${MULLE_OBJC_DEFINITIONS}
-               CACHE INTERNAL "need to cache this"
-            )
+            #
+            unset( MULLE_OBJC_DEFINITIONS)
+            include( "${_TMP_MULLE_OBJC_DIR}/Definitions.cmake" OPTIONAL)
+            list( APPEND INHERITED_DEFINITIONS ${MULLE_OBJC_DEFINITIONS})
             break()
          else()
-            message( STATUS "${_TMP_MULLE_OBJC_DIR}/DependenciesAndLibraries.cmake not found")
+            message( STATUS "${_TMP_MULLE_OBJC_DIR} not found")
          endif()
       endforeach()
       #
@@ -75,11 +69,7 @@ if( NOT MULLE_OBJC_LIBRARY)
          foreach( _TMP_MULLE_OBJC_NAME "MulleObjC")
             set( _TMP_MULLE_OBJC_FILE "${_TMP_MULLE_OBJC_ROOT}/include/${_TMP_MULLE_OBJC_NAME}/MulleObjCLoader+${_TMP_MULLE_OBJC_NAME}.h")
             if( EXISTS "${_TMP_MULLE_OBJC_FILE}")
-               set( INHERITED_OBJC_LOADERS
-                  ${INHERITED_OBJC_LOADERS}
-                  ${_TMP_MULLE_OBJC_FILE}
-                  CACHE INTERNAL "need to cache this"
-               )
+               list( APPEND INHERITED_OBJC_LOADERS ${_TMP_MULLE_OBJC_FILE})
                break()
             endif()
          endforeach()
@@ -95,6 +85,7 @@ endif()
 # Generated from sourcetree: A1CF8F8F-3A8D-4204-A97D-00597A7A7474;MulleObjC-startup;no-cmake-dependency,no-cmake-loader,no-cmake-searchpath,no-dynamic-link,no-header,no-intermediate-link;
 # Disable with : `mulle-sourcetree mark MulleObjC-startup no-link`
 # Disable for this platform: `mulle-sourcetree mark MulleObjC-startup no-cmake-platform-${MULLE_UNAME}`
+# Disable for a sdk: `mulle-sourcetree mark MulleObjC-startup no-cmake-sdk-<name>`
 #
 if( NOT MULLE_OBJC_STARTUP_LIBRARY)
    find_library( MULLE_OBJC_STARTUP_LIBRARY NAMES ${CMAKE_STATIC_LIBRARY_PREFIX}MulleObjC-startup${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX} ${CMAKE_STATIC_LIBRARY_PREFIX}MulleObjC-startup${CMAKE_STATIC_LIBRARY_SUFFIX} NO_CMAKE_SYSTEM_PATH NO_SYSTEM_ENVIRONMENT_PATH)
@@ -108,11 +99,7 @@ if( NOT MULLE_OBJC_STARTUP_LIBRARY)
       # Add MULLE_OBJC_STARTUP_LIBRARY to STARTUP_ALL_LOAD_DEPENDENCY_LIBRARIES list.
       # Disable with: `mulle-sourcetree mark MulleObjC-startup no-cmake-add`
       #
-      set( STARTUP_ALL_LOAD_DEPENDENCY_LIBRARIES
-         ${STARTUP_ALL_LOAD_DEPENDENCY_LIBRARIES}
-         ${MULLE_OBJC_STARTUP_LIBRARY}
-         CACHE INTERNAL "need to cache this"
-      )
+      list( APPEND STARTUP_ALL_LOAD_DEPENDENCY_LIBRARIES ${MULLE_OBJC_STARTUP_LIBRARY})
       #
       # Inherit information from dependency.
       # Encompasses: no-cmake-searchpath,no-cmake-dependency,no-cmake-loader
@@ -133,6 +120,7 @@ endif()
 # Generated from sourcetree: 38A59CDF-E095-45E6-BFC1-515F90CA7A46;MulleUI;no-singlephase;
 # Disable with : `mulle-sourcetree mark MulleUI no-link`
 # Disable for this platform: `mulle-sourcetree mark MulleUI no-cmake-platform-${MULLE_UNAME}`
+# Disable for a sdk: `mulle-sourcetree mark MulleUI no-cmake-sdk-<name>`
 #
 if( NOT MULLE_UI_LIBRARY)
    find_library( MULLE_UI_LIBRARY NAMES ${CMAKE_STATIC_LIBRARY_PREFIX}MulleUI${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX} ${CMAKE_STATIC_LIBRARY_PREFIX}MulleUI${CMAKE_STATIC_LIBRARY_SUFFIX} MulleUI NO_CMAKE_SYSTEM_PATH NO_SYSTEM_ENVIRONMENT_PATH)
@@ -146,11 +134,7 @@ if( NOT MULLE_UI_LIBRARY)
       # Add MULLE_UI_LIBRARY to ALL_LOAD_DEPENDENCY_LIBRARIES list.
       # Disable with: `mulle-sourcetree mark MulleUI no-cmake-add`
       #
-      set( ALL_LOAD_DEPENDENCY_LIBRARIES
-         ${ALL_LOAD_DEPENDENCY_LIBRARIES}
-         ${MULLE_UI_LIBRARY}
-         CACHE INTERNAL "need to cache this"
-      )
+      list( APPEND ALL_LOAD_DEPENDENCY_LIBRARIES ${MULLE_UI_LIBRARY})
       #
       # Inherit information from dependency.
       # Encompasses: no-cmake-searchpath,no-cmake-dependency,no-cmake-loader
@@ -161,28 +145,25 @@ if( NOT MULLE_UI_LIBRARY)
       get_filename_component( _TMP_MULLE_UI_ROOT "${_TMP_MULLE_UI_ROOT}" DIRECTORY)
       #
       #
-      # Search for "DependenciesAndLibraries.cmake" to include.
+      # Search for "Definitions.cmake" and "DependenciesAndLibraries.cmake" to include.
       # Disable with: `mulle-sourcetree mark MulleUI no-cmake-dependency`
       #
       foreach( _TMP_MULLE_UI_NAME "MulleUI")
          set( _TMP_MULLE_UI_DIR "${_TMP_MULLE_UI_ROOT}/include/${_TMP_MULLE_UI_NAME}/cmake")
          # use explicit path to avoid "surprises"
-         if( EXISTS "${_TMP_MULLE_UI_DIR}/DependenciesAndLibraries.cmake")
-            unset( MULLE_UI_DEFINITIONS)
+         if( IS_DIRECTORY "${_TMP_MULLE_UI_DIR}")
             list( INSERT CMAKE_MODULE_PATH 0 "${_TMP_MULLE_UI_DIR}")
             #
-            include( "${_TMP_MULLE_UI_DIR}/DependenciesAndLibraries.cmake")
-            #
+            include( "${_TMP_MULLE_UI_DIR}/DependenciesAndLibraries.cmake" OPTIONAL)
             #
             list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_MULLE_UI_DIR}")
-            set( INHERITED_DEFINITIONS
-               ${INHERITED_DEFINITIONS}
-               ${MULLE_UI_DEFINITIONS}
-               CACHE INTERNAL "need to cache this"
-            )
+            #
+            unset( MULLE_UI_DEFINITIONS)
+            include( "${_TMP_MULLE_UI_DIR}/Definitions.cmake" OPTIONAL)
+            list( APPEND INHERITED_DEFINITIONS ${MULLE_UI_DEFINITIONS})
             break()
          else()
-            message( STATUS "${_TMP_MULLE_UI_DIR}/DependenciesAndLibraries.cmake not found")
+            message( STATUS "${_TMP_MULLE_UI_DIR} not found")
          endif()
       endforeach()
       #
@@ -193,11 +174,7 @@ if( NOT MULLE_UI_LIBRARY)
          foreach( _TMP_MULLE_UI_NAME "MulleUI")
             set( _TMP_MULLE_UI_FILE "${_TMP_MULLE_UI_ROOT}/include/${_TMP_MULLE_UI_NAME}/MulleObjCLoader+${_TMP_MULLE_UI_NAME}.h")
             if( EXISTS "${_TMP_MULLE_UI_FILE}")
-               set( INHERITED_OBJC_LOADERS
-                  ${INHERITED_OBJC_LOADERS}
-                  ${_TMP_MULLE_UI_FILE}
-                  CACHE INTERNAL "need to cache this"
-               )
+               list( APPEND INHERITED_OBJC_LOADERS ${_TMP_MULLE_UI_FILE})
                break()
             endif()
          endforeach()
