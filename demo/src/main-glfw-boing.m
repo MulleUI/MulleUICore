@@ -698,7 +698,7 @@ static void   receiveOtherEvents( GLFWOSWindow *window, UIEvent *event)
       break;
 
    case UIEventTypeMotion  :
-      position = [event locationInWindow];
+      position = [(UIInputEvent *) event locationInWindow];
       cursor_position_callback( [window os_window],
                                 position.x,
                                 position.y);
@@ -784,9 +784,8 @@ int main( void )
           if (glfwWindowShouldClose(window))
               break;
       }
-      [window frameLoop:UIWindowFrameRateSynced];
    }
-   return( [app run]);
+   return( 0);
 }
 
 

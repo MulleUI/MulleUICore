@@ -69,27 +69,25 @@
 
 - (void) dumpSubviewsWithIndent:(NSUInteger) indent
 {
-   struct mulle_pointerarrayenumerator   rover;
-   UIView                                 *view;
+   UIView   *view;
 
-   rover = mulle_pointerarray_enumerate( &_subviews);
-   while( _mulle_pointerarrayenumerator_next( &rover, (void **) &view))
+   mulle_pointerarray_for( &_subviews, view)
+   {
       [view dumpWithIndent:indent];
-   mulle_pointerarrayenumerator_done( &rover);
+   }
 }
 
 
 - (void) dumpLayersWithIndent:(NSUInteger) indent
 {
-   struct mulle_pointerarrayenumerator   rover;
-   CALayer                               *layer;
+   CALayer   *layer;
 
    [(CALayer *) _mainLayer dumpWithIndent:indent];
 
-   rover = mulle_pointerarray_enumerate( &_layers);
-   while( _mulle_pointerarrayenumerator_next( &rover, (void **) &layer))
+   mulle_pointerarray_for( &_layers, layer)
+   {
       [layer dumpWithIndent:indent];
-   mulle_pointerarrayenumerator_done( &rover);
+   }
 }
 
 

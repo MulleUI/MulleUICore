@@ -1,10 +1,9 @@
-
 # MulleUI
 
 #### 🌀 UI for mulle-objc - Desktop and Mobile
 
 This library adds some convenience atop of MulleUIOS. It is the main starting
-apoint for developing MulleUI code.
+point for developing MulleUI code.
 
 With MulleUI you can
 

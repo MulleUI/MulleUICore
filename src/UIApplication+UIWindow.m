@@ -7,8 +7,8 @@
 
 
 int  UIApplicationRunDrawCallback( CALayerDrawCallback_t *callback,
+                                   CGSize windowSize,
                                    CGSize canvasSize, 
-                                   CGSize windowSize, 
                                    char *title,
                                    CGFloat frameRate)
 {
@@ -19,9 +19,15 @@ int  UIApplicationRunDrawCallback( CALayerDrawCallback_t *callback,
    if( windowSize.width == 0.0)
       windowSize = canvasSize;
 
+   if( windowSize.width == 0.0)
+      windowSize = CGSizeMake( 640, 400);
+
    layer = [CALayer layerWithFrame:CGRectMake( 0, 0, windowSize.width, windowSize.height)];
-   [layer setBounds:CGRectMake( 0, 0, canvasSize.width, canvasSize.height)];
-   [layer setCanvas:CGRectMake( 0, 0, canvasSize.width, canvasSize.height)];
+   if( canvasSize.width != 0.0)
+   {
+      [layer setBounds:CGRectMake( 0, 0, canvasSize.width, canvasSize.height)];
+      [layer setCanvas:CGRectMake( 0, 0, canvasSize.width, canvasSize.height)];
+   }
    [layer setDrawCallback:callback];
 
    // need this for UIWindow to work, since it initializes glwf/SDL

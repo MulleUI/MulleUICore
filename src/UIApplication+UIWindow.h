@@ -5,19 +5,19 @@
 
 
 int  UIApplicationRunDrawCallback( CALayerDrawCallback_t *callback,
-                                    CGSize canvasSize, 
-                                    CGSize windowSize, 
-                                    char *title,
-                                    CGFloat frameRate);
+                                   CGSize windowSize,
+                                   CGSize canvasSize,
+                                   char *title,
+                                   CGFloat frameRate);
 
 // even simpler and more convenient
 static inline int  
      UIApplicationRunDrawCallbackHz( CALayerDrawCallback_t *callback,
-                                     CGSize canvasSize, 
+                                     CGSize windowSize,
                                      char *title,
                                      CGFloat hz)
 {
-   CGFloat    frameRate;
+   CGFloat   frameRate;
 
    if( hz == 0.0)
       frameRate = UIWindowFrameRateAsync;
@@ -26,5 +26,5 @@ static inline int
          frameRate = UIWindowFrameRateSynced;
       else
          frameRate = 1.0f / hz;      
-   return( UIApplicationRunDrawCallback( callback, canvasSize, canvasSize, title, frameRate));
+   return( UIApplicationRunDrawCallback( callback, windowSize, CGSizeZero, title, frameRate));
 }

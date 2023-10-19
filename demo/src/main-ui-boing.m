@@ -1,6 +1,6 @@
 // This demo should show (at least) on Linux the superior approach of UIWindow
 // when it comes to resizing a live version. Whereas the original version,
-// when slowed down with a nanosleep enough to miss the frame redraw time,
+// when slowed down enough with nanosleep to miss the frame redraw time,
 // creates ugly redraws, the UI version is smooth _and_ keeps animating.
 //
 
@@ -74,13 +74,10 @@
 
 /* Prototypes */
 void init( void );
-static void   display( UIWindow *uiWindow,
-                       id <UIGraphicsContext> context,
-                       struct CGFrameInfo *info);
-void reshape( GLFWwindow* window, int w, int h );
-void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods );
-void mouse_button_callback( GLFWwindow* window, int button, int action, int mods );
-void cursor_position_callback( GLFWwindow* window, double x, double y );
+void reshape( int w, int h );
+void key_callback( GLFWwindow* osWindow, int key, int scancode, int action, int mods );
+void mouse_button_callback( GLFWwindow* osWindow, int button, int action, int mods );
+void cursor_position_callback( GLFWwindow* osWindow, double x, double y );
 void DrawBoingBall( void );
 void BounceBall( double dt );
 void DrawBoingBallBand( GLfloat long_lo, GLfloat long_hi );
@@ -552,15 +549,17 @@ void   init( void )
 /*****************************************************************************
  * display()
  *****************************************************************************/
-static void   display( UIWindow *uiWindow,
-                       id <UIGraphicsContext> context,
-                       struct CGFrameInfo *info)
+static int display( UIWindow *window,
+                    id <UIGraphicsContext> context,
+                    struct CGFrameInfo *info)
 {
-   t = info->now;
-   dt = t - t_old;
+   t     = info->now;
+   dt    = t - t_old;
    t_old = t;
 
-   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+   reshape( info->window.framebufferSize.width, info->window.framebufferSize.height);
+
+//   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glPushMatrix();
 
    drawBallHow = DRAW_BALL_SHADOW;
@@ -579,7 +578,11 @@ static void   display( UIWindow *uiWindow,
        struct timespec   delay = { 0, 1000 * 1000 * (1000 / 60) * 2 };
        nanosleep( &delay, NULL);
    }
+
+   // since we don't do nvg calls, nvg won't flush, so do it manually
    glFlush();
+
+   return( 1);
 }
 
 
@@ -587,7 +590,7 @@ static void   display( UIWindow *uiWindow,
 /*****************************************************************************
  * reshape()
  *****************************************************************************/
-void   reshape( GLFWwindow* window, int w, int h )
+void   reshape( int w, int h )
 {
    mat4x4 projection, view;
 
@@ -612,19 +615,19 @@ void   reshape( GLFWwindow* window, int w, int h )
 
 
 
-void   key_callback( GLFWwindow* window, int key, int scancode, int action, int mods )
+void   key_callback( GLFWwindow* osWindow, int key, int scancode, int action, int mods )
 {
     if (action != GLFW_PRESS)
         return;
 
     if (key == GLFW_KEY_ESCAPE && mods == 0)
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
+        glfwSetWindowShouldClose(osWindow, GLFW_TRUE);
     if ((key == GLFW_KEY_ENTER && mods == GLFW_MOD_ALT) ||
         (key == GLFW_KEY_F11 && mods == GLFW_MOD_ALT))
     {
-        if (glfwGetWindowMonitor(window))
+        if (glfwGetWindowMonitor(osWindow))
         {
-            glfwSetWindowMonitor(window, NULL,
+            glfwSetWindowMonitor(osWindow, NULL,
                                  windowed_xpos, windowed_ypos,
                                  windowed_width, windowed_height, 0);
         }
@@ -634,15 +637,15 @@ void   key_callback( GLFWwindow* window, int key, int scancode, int action, int 
             if (monitor)
             {
                 const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-                glfwGetWindowPos(window, &windowed_xpos, &windowed_ypos);
-                glfwGetWindowSize(window, &windowed_width, &windowed_height);
-                glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+                glfwGetWindowPos(osWindow, &windowed_xpos, &windowed_ypos);
+                glfwGetWindowSize(osWindow, &windowed_width, &windowed_height);
+                glfwSetWindowMonitor(osWindow, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
             }
         }
     }
 }
 
-void   mouse_button_callback( GLFWwindow* window, int button, int action, int mods )
+void   mouse_button_callback( GLFWwindow* osWindow, int button, int action, int mods )
 {
    if (button != GLFW_MOUSE_BUTTON_LEFT)
       return;
@@ -659,7 +662,7 @@ void   mouse_button_callback( GLFWwindow* window, int button, int action, int mo
 }
 
 
-void   cursor_position_callback( GLFWwindow* window, double x, double y )
+void   cursor_position_callback( GLFWwindow* osWindow, double x, double y )
 {
    cursor_x = (float) x;
    cursor_y = (float) y;
@@ -673,7 +676,7 @@ void   cursor_position_callback( GLFWwindow* window, double x, double y )
  * GLFWOSEvents, just map back to original C code
  */
 
-static UIWindowEvent  *handleWindowEvent( UIWindow *window, UIWindowEvent *event)
+static UIWindowEvent  *handleWindowEvent( UIWindow *osWindow, UIWindowEvent *event)
 {
    struct MulleIntegerSize   size;
 
@@ -683,8 +686,6 @@ static UIWindowEvent  *handleWindowEvent( UIWindow *window, UIWindowEvent *event
       break;
 
    case UIWindowEventTypeFramebufferResize :
-      size = [(UIWindowFramebufferResizeEvent *) event size];
-      reshape( [window os_window], size.width, size.height);
       return( nil);
    }
 
@@ -692,14 +693,14 @@ static UIWindowEvent  *handleWindowEvent( UIWindow *window, UIWindowEvent *event
 }
 
 
-static UIEvent  *handleEvent( UIWindow *window, UIEvent *event)
+static UIEvent  *handleEvent( UIWindow *osWindow, UIEvent *event)
 {
    CGPoint   position;
 
    switch( [event eventType])
    {
    case UIEventTypePresses :
-      key_callback( [window os_window],
+      key_callback( [osWindow os_window],
                     [(UIKeyboardEvent *) event key],
                     [(UIKeyboardEvent *) event scanCode],
                     [(UIKeyboardEvent *) event action],
@@ -707,14 +708,14 @@ static UIEvent  *handleEvent( UIWindow *window, UIEvent *event)
       break;
 
    case UIEventTypeMotion  :
-      position = [event locationInWindow];
-      cursor_position_callback( [window os_window],
+      position = [(UIInputEvent *) event locationInWindow];
+      cursor_position_callback( [osWindow os_window],
                                 position.x,
                                 position.y);
       break;
 
    case UIEventTypeTouches :
-      mouse_button_callback( [window os_window],
+      mouse_button_callback( [osWindow os_window],
                              [(UIMouseButtonEvent *) event button],
                              [(UIMouseButtonEvent *) event action],
                              [(UIMouseButtonEvent *) event keyModifiers]);
@@ -735,8 +736,7 @@ static UIEvent  *handleEvent( UIWindow *window, UIEvent *event)
 int main( void )
 {
    UIWindow             *uiWindow;
-   GLFWOSWindow         *gWindow;
-   GLFWwindow           *window;
+   GLFWwindow           *osWindow;
    UIApplication        *app;
    struct MulleIntegerSize  framebufferSize;
    NSUInteger           styleMask;
@@ -749,13 +749,14 @@ int main( void )
    {
       styleMask = (UIWindowStyleResizable\
                   |UIWindowOpenGLLibraryFallback
-                  |UIWindowOpenGLDeprecated);
-      uiWindow = [UIWindow windowWithFrame:CGRectMake( 0, 0 , 400, 400)
-                           titleUTF8String:"Demo"
-                                 styleMask:styleMask];
+                  |UIWindowOpenGLDeprecated
+                  |UIWindowStyleRetained);
+      uiWindow  = [UIWindow windowWithFrame:CGRectMake( 0, 0 , 400, 400)
+                            titleUTF8String:"Demo"
+                                  styleMask:styleMask];
 
-      window  = [uiWindow os_window];
-      if (! window)
+      osWindow  = [uiWindow os_window];
+      if (! osWindow)
       {
           glfwTerminate();
           exit( EXIT_FAILURE );
@@ -765,15 +766,16 @@ int main( void )
       [uiWindow setEventCallback:handleEvent];
       [uiWindow setWindowEventCallback:handleWindowEvent];
 
-      glfwSetWindowAspectRatio(window, 1, 1);
+      glfwSetWindowAspectRatio(osWindow, 1, 1);
 
       [uiWindow setScrollWheelSensitivity:1.0];
 
+      // if we kept OS graphics context active, we would not need to
+      // activate/deactivate implicitly, but
+      [uiWindow setKeepOSGraphicsContextActive:NO];
+
       [uiWindow os_activateGraphicsContext];
       [uiWindow os_setSwapInterval:1];
-
-      framebufferSize = [uiWindow os_framebufferSize];
-      reshape( window, framebufferSize.width, framebufferSize.height);
 
       glfwSetTime( 0.0);
 
@@ -783,9 +785,8 @@ int main( void )
 
       [uiWindow setFrameCallback:display];
       [uiWindow setFrameRateHz:100.0];
-      [uiWindow frameLoop];
    }
-   return( [app terminate]);
+   return( [app run]);
 }
 
 
