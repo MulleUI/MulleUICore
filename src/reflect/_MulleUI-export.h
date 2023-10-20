@@ -9,7 +9,14 @@
  *
  *      mulle-sde environment set MULLE_MATCH_TO_C_RUN DISABLE
  */
+#ifndef mulle_u_i_export_h__
+#define mulle_u_i_export_h__
+
+
 #import "MulleObjCLoader+MulleUI.h"
 #import "UIApplication+UIWindow.h"
 #import "UIColor.h"
 #import "UIView+Dump.h"
+
+
+#endif
