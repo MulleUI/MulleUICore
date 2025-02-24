@@ -668,7 +668,7 @@ void   cursor_position_callback( GLFWwindow* window, double x, double y )
 
 static void   receiveWindowEvents( GLFWOSWindow *window, UIWindowEvent *event)
 {
-   struct MulleIntegerSize   size;
+   CGPixelSize   size;
 
    switch( [event windowEventType])
    {
@@ -725,7 +725,7 @@ int main( void )
    GLFWOSWindow         *gWindow;
    GLFWwindow           *window;
    UIApplication        *app;
-   struct MulleIntegerSize  framebufferSize;
+   CGPixelSize  framebufferSize;
    NSUInteger           styleMask;
 
    /* Init GLFW */

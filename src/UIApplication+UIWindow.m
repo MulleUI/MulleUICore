@@ -6,14 +6,14 @@
 #import "import-private.h"
 
 
-int  UIApplicationRunDrawCallback( CALayerDrawCallback_t *callback,
+int  UIApplicationRunDrawCallback( CGGraphicsLayerDrawCallback_t *callback,
                                    CGSize windowSize,
                                    CGSize canvasSize, 
                                    char *title,
                                    CGFloat frameRate)
 {
-   CALayer    *layer;
-   UIWindow   *window;
+   CGGraphicsLayer    *layer;
+   UIWindow           *window;
 
    
    if( windowSize.width == 0.0)
@@ -22,7 +22,7 @@ int  UIApplicationRunDrawCallback( CALayerDrawCallback_t *callback,
    if( windowSize.width == 0.0)
       windowSize = CGSizeMake( 640, 400);
 
-   layer = [CALayer layerWithFrame:CGRectMake( 0, 0, windowSize.width, windowSize.height)];
+   layer = [CGGraphicsLayer layerWithFrame:CGRectMake( 0, 0, windowSize.width, windowSize.height)];
    if( canvasSize.width != 0.0)
    {
       [layer setBounds:CGRectMake( 0, 0, canvasSize.width, canvasSize.height)];
@@ -34,9 +34,11 @@ int  UIApplicationRunDrawCallback( CALayerDrawCallback_t *callback,
    [UIApplication sharedInstance];
 
    window = [UIWindow windowWithLayer:layer
-                      titleUTF8String:title];
+                      titleUTF8String:title
+                            styleMask:UIWindowStyleMaskDefault & ~UIWindowStylePlanes];
    [window setFrameRate:frameRate];
 
    return( UIApplicationRunWindow( window));
 }
+
 

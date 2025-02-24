@@ -57,7 +57,6 @@ src/MulleObjCLoader+MulleUI.h
 src/MulleUI.h
 src/UIApplication+UIWindow.h
 src/UIColor.h
-src/UIView+Dump.h
 src/reflect/_MulleUI-include-public.h
 )
 

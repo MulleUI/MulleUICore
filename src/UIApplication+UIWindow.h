@@ -4,7 +4,7 @@
 #import "import.h"
 
 
-int  UIApplicationRunDrawCallback( CALayerDrawCallback_t *callback,
+int  UIApplicationRunDrawCallback( CGGraphicsLayerDrawCallback_t *callback,
                                    CGSize windowSize,
                                    CGSize canvasSize,
                                    char *title,
@@ -12,7 +12,7 @@ int  UIApplicationRunDrawCallback( CALayerDrawCallback_t *callback,
 
 // even simpler and more convenient
 static inline int  
-     UIApplicationRunDrawCallbackHz( CALayerDrawCallback_t *callback,
+     UIApplicationRunDrawCallbackHz( CGGraphicsLayerDrawCallback_t *callback,
                                      CGSize windowSize,
                                      char *title,
                                      CGFloat hz)

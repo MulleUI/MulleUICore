@@ -12,5 +12,5 @@ endif()
 #
 set( SOURCES
 src/main-glfw-boing.m
-src/main-ui-boing.m
+src/main-refresh.m
 )

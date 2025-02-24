@@ -1,9 +1,14 @@
 # MulleUI
 
-#### 🌀 UI for mulle-objc - Desktop and Mobile
+** TODO: move the code to other places use the name MulleUI to comprise
+** MulleUIImage, MulleUIVideo and MulleUIFoundation
+**
+
+#### 🌀 Fundamental UI for mulle-objc - Desktop and Mobile
 
 This library adds some convenience atop of MulleUIOS. It is the main starting
-point for developing MulleUI code.
+point for developing MulleUI code without widgets and without the Foundation
+(which introduces NSString).
 
 With MulleUI you can
 
@@ -14,7 +19,5 @@ With MulleUI you can
 * animate your UIView or CALayer with **CAAnimation**
 
 MulleUI will utilize a platform specific drawing library variant of **nanovg**.
-
-This library does not provide any widgets. See MulleUIKit for that.
 
 

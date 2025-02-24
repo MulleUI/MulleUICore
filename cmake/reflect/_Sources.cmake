@@ -14,7 +14,6 @@ set( SOURCES
 src/MulleUI.m
 src/UIApplication+UIWindow.m
 src/UIColor.m
-src/UIView+Dump.m
 )
 
 #

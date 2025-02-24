@@ -11,15 +11,18 @@
  *
  */
 
-// You can tweak the following #import with these commands.
-// (Use BF4EC19F-DA58-45CB-A738-983748A7F16C instead of MulleUIOS if there are duplicate entries)
-//    remove #import: : `mulle-sde dependency mark MulleUIOS no-header`
-//    rename:              `mulle-sde dependency|library set MulleUIOS include whatever.h`
-//    reorder:             `mulle-sde dependency move MulleUIOS <up|down>`
-//    toggle #import:     `mulle-sde dependency mark MulleUIOS [no-]import`
-//    toggle public:       `mulle-sde dependency mark MulleUIOS [no-]public`
-//    toggle optional:     `mulle-sde dependency mark MulleUIOS [no-]require`
-//    remove for platform: `mulle-sde dependency mark MulleUIOS no-platform-<uname>`
+// To remove the following dependency (headers and library) completely:
+//   `mulle-sde dependency remove MulleUIOS`
+// (Use BF4EC19F-DA58-45CB-A738-983748A7F16C instead of MulleUIOS, if there are duplicate entries)
+//
+// You can tweak the following #import with these commands:
+//    remove #import      : `mulle-sde dependency mark MulleUIOS no-header`
+//    rename              : `mulle-sde dependency|library set MulleUIOS include whatever.h`
+//    reorder             : `mulle-sde dependency move MulleUIOS <up|down>`
+//    toggle #import      : `mulle-sde dependency mark MulleUIOS [no-]import`
+//    toggle public       : `mulle-sde dependency mark MulleUIOS [no-]public`
+//    toggle optional     : `mulle-sde dependency mark MulleUIOS [no-]require`
+//    remove for platform : `mulle-sde dependency mark MulleUIOS no-platform-<uname>`
 //        (use `mulle-sourcetree-to-c --unames` to list known values)
 #import <MulleUIOS/MulleUIOS.h>   // MulleUIOS
 

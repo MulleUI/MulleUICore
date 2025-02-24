@@ -15,7 +15,6 @@ With MulleUI you can
 
 MulleUI will utilize a platform specific drawing library variant of **nanovg**.
 
-This library does not provide any widgets. See MulleUIKit for that.
 
 
 ### You are here
