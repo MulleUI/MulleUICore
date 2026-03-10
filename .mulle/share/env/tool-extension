@@ -1,5 +1,6 @@
 mulle-cmake-graphviz-include
 mulle-create-build-motd
+mulle-timeout
 clib
 clib-configure
 clib-install
@@ -40,3 +41,5 @@ mulle-match-to-cmake
 mulle-match-to-c
 cmake;script
 clion
+subl
+subl.exe

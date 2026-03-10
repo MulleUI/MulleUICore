@@ -13,7 +13,7 @@
 #define _mulle_u_i__export_h__
 
 
-#import "MulleObjCLoader+MulleUI.h"
+#import "MulleObjCDeps+MulleUI.h"
 #import "UIApplication+UIWindow.h"
 #import "UIColor.h"
 

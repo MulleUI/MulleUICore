@@ -28,8 +28,17 @@
  */
 
 #include "_MulleUI-include.h"
-#ifndef MULLE_UI_EXTERN_GLOBAL
-# define MULLE_UI_EXTERN_GLOBAL MULLE_C_EXTERN_GLOBAL
+
+#ifdef MULLE_UI_BUILD
+# define MULLE_UI_GLOBAL        MULLE_C_GLOBAL
+# define MULLE_UI_GLOBAL_VAR    MULLE_C_GLOBAL_VAR
+#else
+# if defined( MULLE_UI_INCLUDE_DYNAMIC) || (defined( MULLE_INCLUDE_DYNAMIC) && ! defined( MULLE_UI_INCLUDE_STATIC))
+#  define MULLE_UI_GLOBAL       MULLE_C_EXTERN_GLOBAL
+# else
+#  define MULLE_UI_GLOBAL       extern
+# endif
+# define MULLE_UI_GLOBAL_VAR
 #endif
 
 

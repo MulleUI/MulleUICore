@@ -8,7 +8,7 @@
  * vendor/extension: mulle-objc/objc
  *
  * This is a central include file to keep dependencies out of the library
- *  Objective-C files. It is usally imported by Objective-C .h files only.
+ *  Objective-C files. It is usually imported by Objective-C .h files only.
  *  .m and .aam use import-private.h.
  */
 
@@ -28,9 +28,6 @@
  */
 
 #import "_MulleUI-import.h"
-#ifndef MULLE_UI_EXTERN_GLOBAL
-# define MULLE_UI_EXTERN_GLOBAL MULLE_C_EXTERN_GLOBAL
-#endif
 
 
 /* You can add some more import statements here */

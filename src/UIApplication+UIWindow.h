@@ -10,7 +10,9 @@ int  UIApplicationRunDrawCallback( CGGraphicsLayerDrawCallback_t *callback,
                                    char *title,
                                    CGFloat frameRate);
 
-// even simpler and more convenient
+//
+// even simpler and more convenient, also enables mouse polling
+//
 static inline int  
      UIApplicationRunDrawCallbackHz( CGGraphicsLayerDrawCallback_t *callback,
                                      CGSize windowSize,
@@ -26,5 +28,9 @@ static inline int
          frameRate = UIWindowFrameRateSynced;
       else
          frameRate = 1.0f / hz;      
-   return( UIApplicationRunDrawCallback( callback, windowSize, CGSizeZero, title, frameRate));
+   return( UIApplicationRunDrawCallback( callback,
+                                         windowSize,
+                                         CGSizeZero,
+                                         title,
+                                         frameRate));
 }

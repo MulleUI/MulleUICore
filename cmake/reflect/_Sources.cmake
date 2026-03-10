@@ -20,5 +20,5 @@ src/UIColor.m
 # contents selected with patternfile ??-source--stage2-sources
 #
 set( STAGE2_SOURCES
-src/MulleObjCLoader+MulleUI.m
+src/MulleObjCDeps+MulleUI.m
 )

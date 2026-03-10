@@ -12,6 +12,7 @@ endif()
 
 set( INCLUDE_DIRS
 src/reflect
+src/generic
 src
 )
 
@@ -27,8 +28,8 @@ src/reflect/_MulleUI-include-private.h
 # contents selected with patternfile ??-header--private-generic-headers
 #
 set( PRIVATE_GENERIC_HEADERS
-src/import-private.h
-src/include-private.h
+src/generic/import-private.h
+src/generic/include-private.h
 )
 
 #
@@ -45,15 +46,15 @@ src/reflect/_MulleUI-provide.h
 # contents selected with patternfile ??-header--public-generic-headers
 #
 set( PUBLIC_GENERIC_HEADERS
-src/import.h
-src/include.h
+src/generic/import.h
+src/generic/include.h
 )
 
 #
 # contents selected with patternfile ??-header--public-headers
 #
 set( PUBLIC_HEADERS
-src/MulleObjCLoader+MulleUI.h
+src/MulleObjCDeps+MulleUI.h
 src/MulleUI.h
 src/UIApplication+UIWindow.h
 src/UIColor.h

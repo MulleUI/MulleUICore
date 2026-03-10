@@ -14,7 +14,7 @@ int  UIApplicationRunDrawCallback( CGGraphicsLayerDrawCallback_t *callback,
 {
    CGGraphicsLayer    *layer;
    UIWindow           *window;
-
+   NSUInteger         styleMask;
    
    if( windowSize.width == 0.0)
       windowSize = canvasSize;
@@ -33,9 +33,13 @@ int  UIApplicationRunDrawCallback( CGGraphicsLayerDrawCallback_t *callback,
    // need this for UIWindow to work, since it initializes glwf/SDL
    [UIApplication sharedInstance];
 
+   styleMask = UIWindowStyleMaskDefault;
+   styleMask = UIWindowStyleMaskBySetting( styleMask, UIWindowStylePlanes, NO);
+   styleMask = UIWindowStyleMaskBySetting( styleMask, UIWindowStyleMousePolling, YES);
+
    window = [UIWindow windowWithLayer:layer
                       titleUTF8String:title
-                            styleMask:UIWindowStyleMaskDefault & ~UIWindowStylePlanes];
+                            styleMask:styleMask];
    [window setFrameRate:frameRate];
 
    return( UIApplicationRunWindow( window));

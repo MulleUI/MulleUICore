@@ -19,7 +19,7 @@
 //    remove #import      : `mulle-sde dependency mark MulleUIOS no-header`
 //    rename              : `mulle-sde dependency|library set MulleUIOS include whatever.h`
 //    reorder             : `mulle-sde dependency move MulleUIOS <up|down>`
-//    toggle #import      : `mulle-sde dependency mark MulleUIOS [no-]import`
+//    toggle objc         : `mulle-sde dependency mark MulleUIOS [no-]import`
 //    toggle public       : `mulle-sde dependency mark MulleUIOS [no-]public`
 //    toggle optional     : `mulle-sde dependency mark MulleUIOS [no-]require`
 //    remove for platform : `mulle-sde dependency mark MulleUIOS no-platform-<uname>`

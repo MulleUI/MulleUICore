@@ -12,3 +12,4 @@ mulle-sde/cmake;buildtool
 mulle-objc/objc-demo;extra
 mulle-foundation/objc-demo;extra
 mulle-sde/idea;extra
+mulle-sde/sublime-text;extra
