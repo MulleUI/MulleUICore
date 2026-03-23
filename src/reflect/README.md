@@ -2,18 +2,18 @@
 
 ## External consumption only
 
-### `MulleUI-export.h`
+### `MulleUIWidgetsBase-export.h`
 
 This file is generated for the Objective-C envelope header (typically
-`MulleUI
+`MulleUIWidgetsBase
 .h`). It contains the list of Objective-C headers that
 are advertised to consumers of this library
 
 
-### `MulleUI-provide.h`
+### `MulleUIWidgetsBase-provide.h`
 
 This file is generated for the Objective-C or C envelope header (typically
-`MulleUI
+`MulleUIWidgetsBase
 .h`). It contains the list of C headers that will be
 advertised to consumers of this library.
 
@@ -27,14 +27,14 @@ It's updated during a build.
 ## Internal and External consumption
 
 
-### `MulleUI-import.h`
+### `MulleUIWidgetsBase-import.h`
 
 Objective-C dependency headers that this project uses are imported via
 this file. Dependencies are managed with `mulle-sde dependency`
 These dependencies are also available to consumers of this library.
 
 
-### `MulleUI-include.h`
+### `MulleUIWidgetsBase-include.h`
 
 C dependency and library headers that this project uses are imported via
 this file. Dependencies are managed with `mulle-sde dependency`.
@@ -45,13 +45,13 @@ These dependencies are also available to consumers of this library.
 ## Internal consumption only
 
 
-### `MulleUI-import-private.h`
+### `MulleUIWidgetsBase-import-private.h`
 
 Objective-C dependency headers that this project uses privately are imported
 via this file.
 
 
-### `MulleUI-include-private.h`
+### `MulleUIWidgetsBase-include-private.h`
 
 C dependency and library headers that this project uses privately are imported
 via this file.

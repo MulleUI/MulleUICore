@@ -1,11 +1,20 @@
-# MulleUI
+# MulleUIWidgetsBase
 
 #### 🌀 UI for mulle-objc - Desktop and Mobile
 
-This library adds some convenience atop of MulleUIOS. It is the main starting
-apoint for developing MulleUI code.
+# MulleUIWidgetsBase
 
-With MulleUI you can
+** TODO: move the code to other places use the name MulleUIWidgetsBase to comprise
+** MulleUIImage, MulleUIVideo and MulleUIFoundation
+**
+
+#### 🌀 Fundamental UI for mulle-objc - Desktop and Mobile
+
+This library adds some convenience atop of MulleUIOS. It is the main starting
+point for developing MulleUIWidgetsBase code without widgets and without the Foundation
+(which introduces NSString).
+
+With MulleUIWidgetsBase you can
 
 * create windows with **UIWindow**
 * layout window contents with **UIView**
@@ -13,8 +22,94 @@ With MulleUI you can
 * do drawings in your UIView with **CALayer**
 * animate your UIView or CALayer with **CAAnimation**
 
-MulleUI will utilize a platform specific drawing library variant of **nanovg**.
+MulleUIWidgetsBase will utilize a platform specific drawing library variant of **nanovg**.
 
+
+
+
+
+| Release Version                                       | Release Notes  | AI Documentation
+|-------------------------------------------------------|----------------|---------------
+| ![Mulle kybernetiK tag](https://img.shields.io/github/tag/MulleUIWidgetsBase/MulleUIWidgetsBase.svg) [![Build Status](https://github.com/MulleUIWidgetsBase/MulleUIWidgetsBase/workflows/CI/badge.svg)](//github.com/MulleUIWidgetsBase/MulleUIWidgetsBase/actions) | [RELEASENOTES](RELEASENOTES.md) | [DeepWiki for MulleUIWidgetsBase](https://deepwiki.com/MulleUIWidgetsBase/MulleUIWidgetsBase)
+
+
+
+
+
+At the lowest level, MulleUIWidgetsBase relies on an external library like GLFW or SDL2 to
+interface with the operating system and provide a graphics context. This
+context could be OpenGL, Vulkan, Metal, or DirectX depending on platform support.
+
+GLFW and SDL2 take care of creating a window, handling input events, and making
+the GPU accessible via a graphics API. They provide cross-platform abstractions
+over the OS-specific implementations.
+
+On top of the graphics context, MulleUIWidgetsBase uses the nanovg library to provide 2D
+vector graphics rendering. Nanovg offers functions like shapes, text, images
+etc that it renders using the underlying OpenGL/Vulkan context provided by
+GLFW/SDL2.
+
+Nanovg serves as a hardware-accelerated scene graph and renderer optimized for
+UI elements. It takes drawing commands from the app and efficiently batches
+them into GPU textures and vertices for improved performance.
+
+At the top level, MulleUIWidgetsBase has the UIView class which provides the window and
+view hierarchy. During rendering, this UIView hierarchy is flattened into an
+array of CALayers.
+
+The CALayer class wraps the underlying nanovg drawing API to provide
+CoreAnimation-style rendering. The array of CALayers is passed to nanovg to
+issue the actual draw commands.
+
+
+### An event flow
+
+The operating system detects a mouse button press event and calls the mouse
+button callback function registered by the UIEvent class.
+
+Inside this callback, the UIEvent class creates a new UIMouseButtonEvent object
+and  initializes it with details like the mouse position, button pressed, and
+modifier keys state. This event is then passed to the UIWindow.
+
+The UIWindow then calls its own receiveRetainedEvent: method, passing the new
+UIMouseButtonEvent object. This kicks off the event handling and propagation process.
+
+Inside receiveRetainedEvent:, the UIWindow checks if the event target is
+itself or if it should be propagated down to a subview.events like window resize.
+For a mouse click, the UIWindow will likely return NO from willHandleEvent:
+indicating the event should be passed down the view hierarchy.
+
+The UIWindow iterates through its subviews recursively calling
+hitTest:withEvent: to find the deepest UIView that contains the mouse click
+location. This hit testing uses pointInside:withEvent: to check each view's
+bounds.
+
+Let's say a UIButton deep in the hierarchy returns YES from
+pointInside:withEvent:, indicating it should handle the mouse click.
+The UIWindow sets that UIButton as the event's target.
+
+Now propagateEvent: is called on the UIButton, passing the UIMouseButtonEvent.
+This in turn calls handleEvent: on the UIButton.
+
+In its handleEvent: method, the UIButton can update its own state in response
+to the mouse click, like changing from an unchecked to checked appearance.
+
+The UIButton calls setNeedsDisplay on itself to mark that its visual appearance needs updating.
+
+On the next frame, the UIWindow traverses its subview hierarchy and calls
+-layout on views marked as needing layout. This recalculates frames etc.
+
+The UIWindow then calls renderInContext: on each subview. The UIButton renders
+its updated state into its backing CALayer.
+
+Each UIView's CALayers are added to the render queue. The UIWindow walks this
+queue and calls -drawInContext: on each CALayer.
+
+The CALayers issue nanovg draw commands to recreate the framebuffer, which will
+now contain the updated UIButton state.
+
+Finally, the new framebuffer is swapped with the previous one. The user now
+sees the UIButton's changed state.
 
 
 ### You are here
@@ -23,47 +118,65 @@ MulleUI will utilize a platform specific drawing library variant of **nanovg**.
 
 
 
+
+
 ## Add
 
-Use [mulle-sde](//github.com/mulle-sde) to add MulleUI to your project:
+Use [mulle-sde](//github.com/mulle-sde) to add MulleUIWidgetsBase to your project:
 
-``` console
-mulle-sde dependency add --c --github <|GITHUB_USER|> MulleUI
+``` sh
+mulle-sde add github:MulleUIWidgetsBase/MulleUIWidgetsBase
 ```
+
+To only add the sources of MulleUIWidgetsBase with dependency
+sources use [clib](https://github.com/clibs/clib):
+
+
+``` sh
+clib install --out src/MulleUIWidgetsBase MulleUIWidgetsBase/MulleUIWidgetsBase
+```
+
+Add `-isystem src/MulleUIWidgetsBase` to your `CFLAGS` and compile all the sources that were downloaded with your project.
+
 
 ## Install
 
-### mulle-sde
+Use [mulle-sde](//github.com/mulle-sde) to build and install MulleUIWidgetsBase and all dependencies:
 
-Use [mulle-sde](//github.com/mulle-sde) to build and install MulleUI
-and all its dependencies:
-
-```
+``` sh
 mulle-sde install --prefix /usr/local \
-   https://github.com/<|GITHUB_USER|>/MulleUI/archive/latest.tar.gz
+   https://github.com/MulleUIWidgetsBase/MulleUIWidgetsBase/archive/latest.tar.gz
 ```
 
-### Manual Installation
-
+### Legacy Installation
 
 Install the requirements:
 
-Requirements                                      | Description
---------------------------------------------------|-----------------------
-[some-requirement](//github.com/some/requirement) | Some requirement
+| Requirements                                 | Description
+|----------------------------------------------|-----------------------
+| [MulleUIWindow](https://github.com/MulleUIWidgetsBase/MulleUIWindow)             | 🛸 MulleUIWindow provides UIWindow and extends UIView functionality
+| [MulleGraphics](https://github.com/MulleUIWidgetsBase/MulleGraphics)             | 🌠 MulleGraphics provides CALayer subclasses
+| [mulle-objc-list](https://github.com/mulle-objc/mulle-objc-list)             | 📒 Lists mulle-objc runtime information contained in executables.
 
-Install into `/usr/local`:
+Download the latest [tar](https://github.com/MulleUIWidgetsBase/MulleUIWidgetsBase/archive/refs/tags/latest.tar.gz) or [zip](https://github.com/MulleUIWidgetsBase/MulleUIWidgetsBase/archive/refs/tags/latest.zip) archive and unpack it.
+
+Install **MulleUIWidgetsBase** into `/usr/local` with [cmake](https://cmake.org):
 
 ``` sh
-cmake -B build \
-      -DCMAKE_INSTALL_PREFIX=/usr/local \
-      -DCMAKE_PREFIX_PATH=/usr/local \
+PREFIX_DIR="/usr/local"
+cmake -B build                               \
+      -DMULLE_SDK_PATH="${PREFIX_DIR}"       \
+      -DCMAKE_INSTALL_PREFIX="${PREFIX_DIR}" \
+      -DCMAKE_PREFIX_PATH="${PREFIX_DIR}"    \
       -DCMAKE_BUILD_TYPE=Release &&
 cmake --build build --config Release &&
 cmake --install build --config Release
 ```
 
-### Steal
 
-Read [STEAL.md](//github.com/mulle-c11/dox/STEAL.md) on how to steal the
-source code and incorporate it in your own projects.
+## Author
+
+[Nat!](https://mulle-kybernetik.com/weblog) for Mulle kybernetiK  
+
+
+

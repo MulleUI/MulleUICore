@@ -1,0 +1,41 @@
+{
+   project =
+   {
+      description="🌀 UI for mulle-objc - Desktop and Mobile";
+      domain="github";
+      language="c";
+      dialect="objc";
+      name="MulleUI";
+      user="MulleUI";
+      repo="MulleUI";
+      homepage="https://github.com/MulleUI/MulleUI";
+      license="UNLICENSED";
+   };
+   dependencies =
+   (
+      {
+         description="🛸 MulleUIWindow provides UIWindow and extends UIView functionality";
+         domain="github";
+         name="MulleUIWindow";
+         repo="MulleUIWindow";
+         url="https://github.com/MulleUI/MulleUIWindow";
+         user="MulleUI";
+      },
+      {
+         description="🌠 MulleGraphics provides CALayer subclasses";
+         domain="github";
+         name="MulleGraphics";
+         repo="MulleGraphics";
+         url="https://github.com/MulleUI/MulleGraphics";
+         user="MulleUI";
+      },
+      {
+         description="📒 Lists mulle-objc runtime information contained in executables.";
+         domain="github";
+         name="mulle-objc-list";
+         repo="mulle-objc-list";
+         url="https://github.com/mulle-objc/mulle-objc-list";
+         user="mulle-objc";
+      }
+   );
+}

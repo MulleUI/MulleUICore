@@ -27,7 +27,7 @@
    sourcetree, then you don't need it.
  */
 
-#import "_MulleUI-import.h"
+#import "_MulleUIWidgetsBase-import.h"
 
 
 /* You can add some more import statements here */

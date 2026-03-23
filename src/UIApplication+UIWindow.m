@@ -5,6 +5,8 @@
 
 #import "import-private.h"
 
+#import "CGGraphicsLayer+UILayer.h"
+
 
 int  UIApplicationRunDrawCallback( CGGraphicsLayerDrawCallback_t *callback,
                                    CGSize windowSize,

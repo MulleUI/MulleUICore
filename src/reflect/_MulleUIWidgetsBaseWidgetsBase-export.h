@@ -13,9 +13,16 @@
 #define _mulle_u_i__export_h__
 
 
-#import "MulleObjCDeps+MulleUI.h"
+#import "CALayer+UIOSWindow.h"
+#import "CGFramebuffer+UIFramebuffer.h"
+#import "CGGraphicsLayer+UILayer.h"
+#import "CGImage+UIImage.h"
+#import "MulleObjCDeps+MulleUIWidgetsBase.h"
 #import "UIApplication+UIWindow.h"
-#import "UIColor.h"
+#import "UIView+CAShadowLayer.h"
+#import "UIView+CGGraphicsLayer.h"
+#import "UIWindow+CGColor.h"
+#import "UIWindow+CGGraphicsLayer.h"
 
 
 #endif

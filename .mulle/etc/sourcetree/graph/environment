@@ -1,7 +1,4 @@
 GRAPH_MAX_LEVEL=5
 GRAPH_DEDUPE=NO
 GRAPH_DIRECTION=TD
-GRAPH_HEADER='glfw [ fillcolor="goldenrod" ];
-nanovg [ fillcolor="goldenrod" ];'
 GRAPH_LEAFS="MulleFoundationBase:MulleObjC:mulle-gfx"
-GRAPH_IGNORES="src/mulle-color:craftinfo/glfw-craftinfo.x11:craftinfo/freetype-craftinfo"

@@ -11,14 +11,22 @@ endif()
 # contents selected with patternfile ??-source--sources
 #
 set( SOURCES
-src/MulleUI.m
+src/CALayer+UIOSWindow.m
+src/CGFramebuffer+UIFramebuffer.m
+src/CGGraphicsLayer+UILayer.m
+src/CGImage+UIImage.m
+src/MulleUIWidgetsBase.m
 src/UIApplication+UIWindow.m
-src/UIColor.m
+src/UIView+CAShadowLayer.m
+src/UIView+CGGraphicsLayer.m
+src/UIWindow+CGColor.m
+src/UIWindow+CGFramebuffer.m
+src/UIWindow+CGGraphicsLayer.m
 )
 
 #
 # contents selected with patternfile ??-source--stage2-sources
 #
 set( STAGE2_SOURCES
-src/MulleObjCDeps+MulleUI.m
+src/MulleObjCDeps+MulleUIWidgetsBase.m
 )

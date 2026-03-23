@@ -35,6 +35,6 @@ extern uint32_t   MulleUI_get_version( void);
    consumers.
 */
 
-#import "_MulleUI-export.h"
+#import "_MulleUIWidgetsBase-export.h"
 
-#include "_MulleUI-provide.h"
+#include "_MulleUIWidgetsBase-provide.h"
