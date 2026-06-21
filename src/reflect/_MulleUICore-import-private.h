@@ -13,7 +13,7 @@
 /* no headers */
 
 #ifdef __has_include
-# if __has_include( "_MulleUIWidgetsBase-include-private.h")
-#  include "_MulleUIWidgetsBase-include-private.h"
+# if __has_include( "_MulleUICore-include-private.h")
+#  include "_MulleUICore-include-private.h"
 # endif
 #endif

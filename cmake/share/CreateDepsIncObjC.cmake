@@ -67,19 +67,19 @@ if( CREATE_OBJC_DEPS_INC)
 #   )
    message( STATUS "OBJC_DEPS_INC is \"${OBJC_DEPS_INC}\"")
 
-   if( INHERITED_OBJC_DEPSS)
-     list( REMOVE_DUPLICATES INHERITED_OBJC_DEPSS)
+   if( INHERITED_OBJC_DEPS)
+     list( REMOVE_DUPLICATES INHERITED_OBJC_DEPS)
    endif()
 
-   message( STATUS "INHERITED_OBJC_DEPSS is \"${INHERITED_OBJC_DEPSS}\"")
+   message( STATUS "INHERITED_OBJC_DEPS is \"${INHERITED_OBJC_DEPS}\"")
 
 
    # The preferred way:
    #
-   # _1_MulleUI is an object library (a collection of files).
-   # _2_MulleUI is the deps with OBJC_DEPS_INC.
+   # _1_MulleUICore is an object library (a collection of files).
+   # _2_MulleUICore is the deps with OBJC_DEPS_INC.
    #
-   # Produce a static library _3_MulleUI from _1_MulleUI
+   # Produce a static library _3_MulleUICore from _1_MulleUICore
    # to feed into MULLE_OBJC_DEPS_TOOL.
    #
    # The static library is, so that the commandline doesn't overflow for
@@ -135,7 +135,7 @@ if( CREATE_OBJC_DEPS_INC)
                  -c "${CMAKE_BUILD_TYPE}"
                  -o "${OBJC_DEPS_INC}"
                  ${OBJC_DEPS_LIBRARY}
-                 ${INHERITED_OBJC_DEPSS}
+                 ${INHERITED_OBJC_DEPS}
       DEPENDS ${OBJC_DEPS_LIBRARY}
               ${ALL_LOAD_DEPENDENCY_LIBRARIES}
       COMMENT "Create: ${OBJC_DEPS_INC}"

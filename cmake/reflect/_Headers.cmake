@@ -20,10 +20,10 @@ src
 # contents selected with patternfile ??-header--private-generated-headers
 #
 set( PRIVATE_GENERATED_HEADERS
-src/reflect/_MulleUIWidgetsBaseWidgetsBase-import-private.h
-src/reflect/_MulleUIWidgetsBaseWidgetsBase-include-private.h
-src/reflect/_MulleUIWidgetsBase-import-private.h
-src/reflect/_MulleUIWidgetsBase-include-private.h
+src/reflect/_MulleUICoreWidgetsBase-import-private.h
+src/reflect/_MulleUICoreWidgetsBase-include-private.h
+src/reflect/_MulleUICore-import-private.h
+src/reflect/_MulleUICore-include-private.h
 )
 
 #
@@ -38,14 +38,14 @@ src/generic/include-private.h
 # contents selected with patternfile ??-header--public-generated-headers
 #
 set( PUBLIC_GENERATED_HEADERS
-src/reflect/_MulleUIWidgetsBaseWidgetsBase-export.h
-src/reflect/_MulleUIWidgetsBaseWidgetsBase-import.h
-src/reflect/_MulleUIWidgetsBaseWidgetsBase-include.h
-src/reflect/_MulleUIWidgetsBaseWidgetsBase-provide.h
-src/reflect/_MulleUIWidgetsBase-export.h
-src/reflect/_MulleUIWidgetsBase-import.h
-src/reflect/_MulleUIWidgetsBase-include.h
-src/reflect/_MulleUIWidgetsBase-provide.h
+src/reflect/_MulleUICoreWidgetsBase-export.h
+src/reflect/_MulleUICoreWidgetsBase-import.h
+src/reflect/_MulleUICoreWidgetsBase-include.h
+src/reflect/_MulleUICoreWidgetsBase-provide.h
+src/reflect/_MulleUICore-export.h
+src/reflect/_MulleUICore-import.h
+src/reflect/_MulleUICore-include.h
+src/reflect/_MulleUICore-provide.h
 )
 
 #
@@ -64,13 +64,13 @@ src/CALayer+UIOSWindow.h
 src/CGFramebuffer+UIFramebuffer.h
 src/CGGraphicsLayer+UILayer.h
 src/CGImage+UIImage.h
-src/MulleObjCDeps+MulleUIWidgetsBase.h
-src/MulleUIWidgetsBase.h
+src/MulleObjCDeps+MulleUICore.h
+src/MulleUICore.h
 src/UIApplication+UIWindow.h
 src/UIView+CAShadowLayer.h
 src/UIView+CGGraphicsLayer.h
 src/UIWindow+CGColor.h
 src/UIWindow+CGGraphicsLayer.h
-src/reflect/_MulleUIWidgetsBaseWidgetsBase-include-public.h
+src/reflect/_MulleUICoreWidgetsBase-include-public.h
 )
 

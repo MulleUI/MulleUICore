@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.15...99.99)
 
-project( MulleUIWidgetsBase C)
+project( MulleUICore C)
 
 
 ### mulle-sde environment

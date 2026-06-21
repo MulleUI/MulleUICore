@@ -17,7 +17,7 @@
 #import "CGFramebuffer+UIFramebuffer.h"
 #import "CGGraphicsLayer+UILayer.h"
 #import "CGImage+UIImage.h"
-#import "MulleObjCDeps+MulleUIWidgetsBase.h"
+#import "MulleObjCDeps+MulleUICore.h"
 #import "UIApplication+UIWindow.h"
 #import "UIView+CAShadowLayer.h"
 #import "UIView+CGGraphicsLayer.h"

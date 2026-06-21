@@ -37,7 +37,7 @@ int  UIApplicationRunDrawCallback( CGGraphicsLayerDrawCallback_t *callback,
 
    styleMask = UIWindowStyleMaskDefault;
    styleMask = UIWindowStyleMaskBySetting( styleMask, UIWindowStylePlanes, NO);
-   styleMask = UIWindowStyleMaskBySetting( styleMask, UIWindowStyleMousePolling, YES);
+   styleMask = UIWindowStyleMaskBySetting( styleMask, UIWindowStyleInputPolling, YES);
 
    window = [UIWindow windowWithLayer:layer
                       titleUTF8String:title

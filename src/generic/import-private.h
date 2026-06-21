@@ -27,6 +27,6 @@
    Here the prefix is harmless and serves disambiguation. If you have no
    sourcetree, then you don't need it.
  */
-#import "_MulleUIWidgetsBase-import-private.h"
+#import "_MulleUICore-import-private.h"
 
 /* You can add some more import statements here */

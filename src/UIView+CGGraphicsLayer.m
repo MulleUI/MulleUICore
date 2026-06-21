@@ -73,3 +73,7 @@ MULLE_OBJC_DEPENDS_ON_CATEGORY( UIView, Layout);
 @end
 
 
+
+@implementation UIView( CGGraphicsLayerForwarding)
+@end
+

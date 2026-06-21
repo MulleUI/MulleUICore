@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/MulleUIWidgetsBase.iml" filepath="$PROJECT_DIR$/.idea/MulleUIWidgetsBase.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/MulleUICore.iml" filepath="$PROJECT_DIR$/.idea/MulleUICore.iml" />
     </modules>
   </component>
 </project>

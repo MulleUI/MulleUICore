@@ -49,7 +49,7 @@ export MULLE_CRAFT_USE_SCRIPT="YES"
 #
 #
 #
-export MULLE_CRAFT_PLATFORMS="${MULLE_UNAME}:windows"
+export MULLE_CRAFT_PLATFORMS="${MULLE_UNAME}"
 
 
 #

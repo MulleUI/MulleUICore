@@ -12,19 +12,19 @@
  */
 
 // To remove the following dependency (headers and library) completely:
-//   `mulle-sde dependency remove MulleUI`
-// (Use 38A59CDF-E095-45E6-BFC1-515F90CA7A46 instead of MulleUI, if there are duplicate entries)
+//   `mulle-sde dependency remove MulleUIOS`
+// (Use 88166AF8-C8DF-4A43-B0D5-0D47B6BEB905 instead of MulleUIOS, if there are duplicate entries)
 //
 // You can tweak the following #import with these commands:
-//    remove #import      : `mulle-sde dependency mark MulleUI no-header`
-//    rename              : `mulle-sde dependency|library set MulleUI include whatever.h`
-//    reorder             : `mulle-sde dependency move MulleUI <up|down>`
-//    toggle #import      : `mulle-sde dependency mark MulleUI [no-]import`
-//    toggle public       : `mulle-sde dependency mark MulleUI [no-]public`
-//    toggle optional     : `mulle-sde dependency mark MulleUI [no-]require`
-//    remove for platform : `mulle-sde dependency mark MulleUI no-platform-<uname>`
+//    remove #import      : `mulle-sde dependency mark MulleUIOS no-header`
+//    rename              : `mulle-sde dependency|library set MulleUIOS include whatever.h`
+//    reorder             : `mulle-sde dependency move MulleUIOS <up|down>`
+//    toggle objc         : `mulle-sde dependency mark MulleUIOS [no-]import`
+//    toggle public       : `mulle-sde dependency mark MulleUIOS [no-]public`
+//    toggle optional     : `mulle-sde dependency mark MulleUIOS [no-]require`
+//    remove for platform : `mulle-sde dependency mark MulleUIOS no-platform-<uname>`
 //        (use `mulle-sourcetree-to-c --unames` to list known values)
-#import <MulleUI/MulleUI.h>   // MulleUI
+#import <MulleUIOS/MulleUIOS.h>   // MulleUIOS
 
 // To remove the following dependency (headers and library) completely:
 //   `mulle-sde dependency remove MulleImage`
@@ -34,7 +34,7 @@
 //    remove #import      : `mulle-sde dependency mark MulleImage no-header`
 //    rename              : `mulle-sde dependency|library set MulleImage include whatever.h`
 //    reorder             : `mulle-sde dependency move MulleImage <up|down>`
-//    toggle #import      : `mulle-sde dependency mark MulleImage [no-]import`
+//    toggle objc         : `mulle-sde dependency mark MulleImage [no-]import`
 //    toggle public       : `mulle-sde dependency mark MulleImage [no-]public`
 //    toggle optional     : `mulle-sde dependency mark MulleImage [no-]require`
 //    remove for platform : `mulle-sde dependency mark MulleImage no-platform-<uname>`
@@ -49,7 +49,7 @@
 //    remove #import      : `mulle-sde dependency mark MulleObjC no-header`
 //    rename              : `mulle-sde dependency|library set MulleObjC include whatever.h`
 //    reorder             : `mulle-sde dependency move MulleObjC <up|down>`
-//    toggle #import      : `mulle-sde dependency mark MulleObjC [no-]import`
+//    toggle objc         : `mulle-sde dependency mark MulleObjC [no-]import`
 //    toggle public       : `mulle-sde dependency mark MulleObjC [no-]public`
 //    toggle optional     : `mulle-sde dependency mark MulleObjC [no-]require`
 //    remove for platform : `mulle-sde dependency mark MulleObjC no-platform-<uname>`

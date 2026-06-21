@@ -37,19 +37,21 @@
 #import "import.h"
 
 //
-// these all get fowarded to the "main" layer
+// these all get forwarded to the "main" layer
 //
-@interface UIView( CGGraphicsLayerForwarding)
+@interface UIView( CGGraphicsLayerForwarding) < MulleObjCForwarding>
 
-@property( assign) CGGraphicsLayerDrawCallback_t   *drawCallback;
-@property( observable) MulleCornerInsets           cornerInsets;
-@property( observable) CGFloat                     borderWidth;
-@property( observable) CGFloat                     opacity;
-@property( observable) CGPaint                     *borderPaint;
-@property( observable) CGPaint                     *backgroundPaint;
-@property( observable) CGPoint                     anchorPoint;
-@property( observable) CARotation                  rotation;
-@property( assign) BOOL                            masksToBounds;
+@property( forward, assign) CGGraphicsLayerDrawCallback_t   *drawCallback;
+@property( forward, observable) MulleCornerInsets           cornerInsets;
+@property( forward, observable) CGFloat                     borderWidth;
+@property( forward, observable) CGFloat                     opacity;
+@property( forward, observable) CGPaint                     *borderPaint;
+@property( forward, observable) CGPaint                     *backgroundPaint;
+@property( forward, observable) CGPoint                     anchorPoint;
+@property( forward, observable) CARotation                  rotation;
+@property( forward, assign) BOOL                            masksToBounds;
+
+@optional
 
 - (void) setBorderColor:(CGColor) color;
 - (void) setBackgroundColor:(CGColor) color;

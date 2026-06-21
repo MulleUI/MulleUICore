@@ -1,29 +1,29 @@
-# MulleUIWidgetsBase Library Documentation for AI
+# MulleUICore Library Documentation for AI
 <!-- Keywords: UI, desktop, mobile, convenience, wrapper, objective-c -->
 
 ## 1. Introduction & Purpose
 
-MulleUIWidgetsBase is a high-level convenience library that provides a simplified entry point for developing user interface applications with mulle-objc. It sits atop the MulleUIOS framework and provides an easy-to-use API for creating desktop and mobile user interfaces. The library serves as the main starting point for MulleUIWidgetsBase development, offering streamlined access to window creation, view layout, event handling, drawing operations, and animations.
+MulleUICore is a high-level convenience library that provides a simplified entry point for developing user interface applications with mulle-objc. It sits atop the MulleUIOS framework and provides an easy-to-use API for creating desktop and mobile user interfaces. The library serves as the main starting point for MulleUICore development, offering streamlined access to window creation, view layout, event handling, drawing operations, and animations.
 
-MulleUIWidgetsBase is part of the mulle-objc ecosystem and depends on MulleUIOS as its core foundation. It provides factory classes and convenience functions that simplify common UI tasks while leveraging the underlying graphics capabilities provided by nanovg through the MulleUIOS stack.
+MulleUICore is part of the mulle-objc ecosystem and depends on MulleUIOS as its core foundation. It provides factory classes and convenience functions that simplify common UI tasks while leveraging the underlying graphics capabilities provided by nanovg through the MulleUIOS stack.
 
 ## 2. Key Concepts & Design Philosophy
 
 ### Simplified API Surface
-MulleUIWidgetsBase's primary design goal is to reduce boilerplate and provide the simplest possible API for common UI tasks. It wraps the more complex MulleUIOS APIs with convenience methods and factory patterns.
+MulleUICore's primary design goal is to reduce boilerplate and provide the simplest possible API for common UI tasks. It wraps the more complex MulleUIOS APIs with convenience methods and factory patterns.
 
 ### Color as Values, Not Objects
-Unlike many UI frameworks, MulleUIWidgetsBase treats colors as lightweight CGColor values rather than heavyweight objects. The UIColor class is a factory that produces CGColor structs (which map to nanovg color structs), making color operations efficient and avoiding unnecessary object allocation overhead.
+Unlike many UI frameworks, MulleUICore treats colors as lightweight CGColor values rather than heavyweight objects. The UIColor class is a factory that produces CGColor structs (which map to nanovg color structs), making color operations efficient and avoiding unnecessary object allocation overhead.
 
 ### Convenience Functions Over Class Hierarchies
 The library provides C convenience functions like `UIApplicationRunDrawCallback()` that encapsulate entire application lifecycles, allowing developers to write simple drawing applications with minimal setup code.
 
 ### Integration with mulle-objc Patterns
-MulleUIWidgetsBase follows mulle-objc conventions, including the use of UTF8String methods for string handling, proper memory management patterns, and the avoidance of alloc/init outside of -init methods.
+MulleUICore follows mulle-objc conventions, including the use of UTF8String methods for string handling, proper memory management patterns, and the avoidance of alloc/init outside of -init methods.
 
 ## 3. Core API & Data Structures
 
-### 3.1. `MulleUIWidgetsBase.h`
+### 3.1. `MulleUICore.h`
 
 This is the main umbrella header that provides version information and includes all necessary dependencies.
 
@@ -111,14 +111,14 @@ Even simpler variant that takes a frequency in Hertz and enables mouse polling a
 - **`UIWindowFrameRateAsync`**: Run asynchronously without frame rate limiting.
 - **`UIWindowFrameRateSynced`**: Sync to display refresh rate (VSync).
 
-### 3.4. `MulleObjCLoader+MulleUIWidgetsBase.h`
+### 3.4. `MulleObjCLoader+MulleUICore.h`
 
-Provides the loader interface for the MulleUIWidgetsBase library in the mulle-objc runtime.
+Provides the loader interface for the MulleUICore library in the mulle-objc runtime.
 
 #### MulleObjCLoader Category
 - **`+ (struct _mulle_objc_dependency *) dependencies`**: Returns the dependency information for proper library loading order in the mulle-objc runtime.
 
-This header is required to be public to allow other libraries that depend on MulleUIWidgetsBase to properly declare their load dependencies.
+This header is required to be public to allow other libraries that depend on MulleUICore to properly declare their load dependencies.
 
 ## 4. Performance Characteristics
 
@@ -131,7 +131,7 @@ This header is required to be public to allow other libraries that depend on Mul
 - **Frame rate control** - Applications can run in async mode (no frame limiting), VSync mode (display synchronized), or at a specific frame rate.
 
 ### Thread Safety
-- MulleUIWidgetsBase follows the standard mulle-objc pattern: **not thread-safe by default**. All UI operations should occur on the main thread.
+- MulleUICore follows the standard mulle-objc pattern: **not thread-safe by default**. All UI operations should occur on the main thread.
 - The underlying MulleUIOS framework handles platform-specific threading for window and event management.
 
 ## 5. AI Usage Recommendations & Patterns
@@ -144,7 +144,7 @@ This header is required to be public to allow other libraries that depend on Mul
 
 3. **Import Properly**: Use `#import "import.h"` in source files to get all necessary dependencies. The `import.h` header automatically includes MulleUIOS and all required headers.
 
-4. **Use UTF8String Methods**: All string methods in MulleUIWidgetsBase use UTF-8 encoding. Use methods like `titleUTF8String:` rather than NSString-based APIs for better performance.
+4. **Use UTF8String Methods**: All string methods in MulleUICore use UTF-8 encoding. Use methods like `titleUTF8String:` rather than NSString-based APIs for better performance.
 
 5. **Follow mulle-buffer Patterns**: Use `mulle_buffer_do()` macro for automatic buffer cleanup when working with temporary string buffers.
 
@@ -405,7 +405,7 @@ int   main( int argc, char *argv[])
 
 ## 7. Dependencies
 
-MulleUIWidgetsBase has the following direct dependencies within the mulle-sde ecosystem:
+MulleUICore has the following direct dependencies within the mulle-sde ecosystem:
 
 - **MulleUIOS**: The core UI framework that provides UIWindow, UIView, UIEvent, CALayer, CAAnimation, UIApplication, and all the underlying graphics capabilities through nanovg integration.
 
@@ -419,4 +419,4 @@ MulleUIOS itself transitively depends on many other libraries including:
 - mulle-gfx (nanovg integration)
 - Various support libraries (mulle-freetype, MulleThread, etc.)
 
-However, as a MulleUIWidgetsBase user, you typically only need to be aware of MulleUIWidgetsBase and MulleUIOS, as the build system automatically handles transitive dependencies.
+However, as a MulleUICore user, you typically only need to be aware of MulleUICore and MulleUIOS, as the build system automatically handles transitive dependencies.

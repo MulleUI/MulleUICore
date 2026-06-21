@@ -42,8 +42,8 @@
 #import <MulleGraphics/MulleGraphics.h>   // MulleGraphics
 
 #ifdef __has_include
-# if __has_include( "_MulleUIWidgetsBase-include.h")
-#  include "_MulleUIWidgetsBase-include.h"
+# if __has_include( "_MulleUICore-include.h")
+#  include "_MulleUICore-include.h"
 # endif
 #endif
 

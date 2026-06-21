@@ -15,7 +15,7 @@ src/CALayer+UIOSWindow.m
 src/CGFramebuffer+UIFramebuffer.m
 src/CGGraphicsLayer+UILayer.m
 src/CGImage+UIImage.m
-src/MulleUIWidgetsBase.m
+src/MulleUICore.m
 src/UIApplication+UIWindow.m
 src/UIView+CAShadowLayer.m
 src/UIView+CGGraphicsLayer.m
@@ -28,5 +28,5 @@ src/UIWindow+CGGraphicsLayer.m
 # contents selected with patternfile ??-source--stage2-sources
 #
 set( STAGE2_SOURCES
-src/MulleObjCDeps+MulleUIWidgetsBase.m
+src/MulleObjCDeps+MulleUICore.m
 )

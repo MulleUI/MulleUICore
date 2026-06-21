@@ -14,7 +14,7 @@ export PROJECT_SOURCE_DIR="src"
 #
 #
 #
-export PROJECT_NAME="MulleUIWidgetsBase"
+export PROJECT_NAME="MulleUICore"
 
 
 #

@@ -1,6 +1,6 @@
 #import "import-private.h"
 
-#import "MulleUIWidgetsBase.h"
+#import "MulleUICore.h"
 
 
 int   __MULLE_UI_ranlib__;

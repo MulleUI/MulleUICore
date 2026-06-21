@@ -9,15 +9,15 @@
  *
  *      mulle-sde environment set MULLE_MATCH_TO_C_RUN DISABLE
  */
-#ifndef _mulle_ui_widgets_base__export_h__
-#define _mulle_ui_widgets_base__export_h__
+#ifndef _mulle_ui_core__export_h__
+#define _mulle_ui_core__export_h__
 
 
 #import "CALayer+UIOSWindow.h"
 #import "CGFramebuffer+UIFramebuffer.h"
 #import "CGGraphicsLayer+UILayer.h"
 #import "CGImage+UIImage.h"
-#import "MulleObjCDeps+MulleUIWidgetsBase.h"
+#import "MulleObjCDeps+MulleUICore.h"
 #import "UIApplication+UIWindow.h"
 #import "UIView+CAShadowLayer.h"
 #import "UIView+CGGraphicsLayer.h"
