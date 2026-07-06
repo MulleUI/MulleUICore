@@ -5,9 +5,9 @@
       domain="github";
       language="c";
       dialect="objc";
-      name="MulleUI";
+      name="MulleUICore";
       user="MulleUI";
-      repo="MulleUI";
+      repo="MulleUICore";
       homepage="https://github.com/MulleUI/MulleUI";
       license="UNLICENSED";
    };

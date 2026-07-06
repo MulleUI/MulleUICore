@@ -2,19 +2,19 @@
 
 #### 🌀 UI for mulle-objc - Desktop and Mobile
 
-# MulleUICore
+# MulleUI
 
-** TODO: move the code to other places use the name MulleUICore to comprise
+** TODO: move the code to other places use the name MulleUI to comprise
 ** MulleUIImage, MulleUIVideo and MulleUIFoundation
 **
 
 #### 🌀 Fundamental UI for mulle-objc - Desktop and Mobile
 
 This library adds some convenience atop of MulleUIOS. It is the main starting
-point for developing MulleUICore code without widgets and without the Foundation
+point for developing MulleUI code without widgets and without the Foundation
 (which introduces NSString).
 
-With MulleUICore you can
+With MulleUI you can
 
 * create windows with **UIWindow**
 * layout window contents with **UIView**
@@ -22,7 +22,7 @@ With MulleUICore you can
 * do drawings in your UIView with **CALayer**
 * animate your UIView or CALayer with **CAAnimation**
 
-MulleUICore will utilize a platform specific drawing library variant of **nanovg**.
+MulleUI will utilize a platform specific drawing library variant of **nanovg**.
 
 
 
@@ -30,13 +30,13 @@ MulleUICore will utilize a platform specific drawing library variant of **nanovg
 
 | Release Version                                       | Release Notes  | AI Documentation
 |-------------------------------------------------------|----------------|---------------
-| ![Mulle kybernetiK tag](https://img.shields.io/github/tag/MulleUICore/MulleUICore.svg) [![Build Status](https://github.com/MulleUICore/MulleUICore/workflows/CI/badge.svg)](//github.com/MulleUICore/MulleUICore/actions) | [RELEASENOTES](RELEASENOTES.md) | [DeepWiki for MulleUICore](https://deepwiki.com/MulleUICore/MulleUICore)
+| ![Mulle kybernetiK tag](https://img.shields.io/github/tag/MulleUI/MulleUICore.svg) [![Build Status](https://github.com/MulleUI/MulleUICore/workflows/CI/badge.svg)](//github.com/MulleUI/MulleUICore/actions) | [RELEASENOTES](RELEASENOTES.md) | [DeepWiki for MulleUICore](https://deepwiki.com/MulleUI/MulleUICore)
 
 
 
 
 
-At the lowest level, MulleUICore relies on an external library like GLFW or SDL2 to
+At the lowest level, MulleUI relies on an external library like GLFW or SDL2 to
 interface with the operating system and provide a graphics context. This
 context could be OpenGL, Vulkan, Metal, or DirectX depending on platform support.
 
@@ -44,7 +44,7 @@ GLFW and SDL2 take care of creating a window, handling input events, and making
 the GPU accessible via a graphics API. They provide cross-platform abstractions
 over the OS-specific implementations.
 
-On top of the graphics context, MulleUICore uses the nanovg library to provide 2D
+On top of the graphics context, MulleUI uses the nanovg library to provide 2D
 vector graphics rendering. Nanovg offers functions like shapes, text, images
 etc that it renders using the underlying OpenGL/Vulkan context provided by
 GLFW/SDL2.
@@ -53,7 +53,7 @@ Nanovg serves as a hardware-accelerated scene graph and renderer optimized for
 UI elements. It takes drawing commands from the app and efficiently batches
 them into GPU textures and vertices for improved performance.
 
-At the top level, MulleUICore has the UIView class which provides the window and
+At the top level, MulleUI has the UIView class which provides the window and
 view hierarchy. During rendering, this UIView hierarchy is flattened into an
 array of CALayers.
 
@@ -125,7 +125,7 @@ sees the UIButton's changed state.
 Use [mulle-sde](//github.com/mulle-sde) to add MulleUICore to your project:
 
 ``` sh
-mulle-sde add github:MulleUICore/MulleUICore
+mulle-sde add github:MulleUI/MulleUICore
 ```
 
 To only add the sources of MulleUICore with dependency
@@ -133,10 +133,10 @@ sources use [clib](https://github.com/clibs/clib):
 
 
 ``` sh
-clib install --out src/MulleUICore MulleUICore/MulleUICore
+clib install --out src/MulleUI MulleUI/MulleUICore
 ```
 
-Add `-isystem src/MulleUICore` to your `CFLAGS` and compile all the sources that were downloaded with your project.
+Add `-isystem src/MulleUI` to your `CFLAGS` and compile all the sources that were downloaded with your project.
 
 
 ## Install
@@ -145,7 +145,7 @@ Use [mulle-sde](//github.com/mulle-sde) to build and install MulleUICore and all
 
 ``` sh
 mulle-sde install --prefix /usr/local \
-   https://github.com/MulleUICore/MulleUICore/archive/latest.tar.gz
+   https://github.com/MulleUI/MulleUICore/archive/latest.tar.gz
 ```
 
 ### Legacy Installation
@@ -154,11 +154,11 @@ Install the requirements:
 
 | Requirements                                 | Description
 |----------------------------------------------|-----------------------
-| [MulleUIWindow](https://github.com/MulleUICore/MulleUIWindow)             | 🛸 MulleUIWindow provides UIWindow and extends UIView functionality
-| [MulleGraphics](https://github.com/MulleUICore/MulleGraphics)             | 🌠 MulleGraphics provides CALayer subclasses
+| [MulleUIWindow](https://github.com/MulleUI/MulleUIWindow)             | 🛸 MulleUIWindow provides UIWindow and extends UIView functionality
+| [MulleGraphics](https://github.com/MulleUI/MulleGraphics)             | 🌠 MulleGraphics provides CALayer subclasses
 | [mulle-objc-list](https://github.com/mulle-objc/mulle-objc-list)             | 📒 Lists mulle-objc runtime information contained in executables.
 
-Download the latest [tar](https://github.com/MulleUICore/MulleUICore/archive/refs/tags/latest.tar.gz) or [zip](https://github.com/MulleUICore/MulleUICore/archive/refs/tags/latest.zip) archive and unpack it.
+Download the latest [tar](https://github.com/MulleUI/MulleUICore/archive/refs/tags/latest.tar.gz) or [zip](https://github.com/MulleUI/MulleUICore/archive/refs/tags/latest.zip) archive and unpack it.
 
 Install **MulleUICore** into `/usr/local` with [cmake](https://cmake.org):
 
