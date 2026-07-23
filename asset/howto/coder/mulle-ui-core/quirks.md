@@ -1,4 +1,4 @@
-<!-- keywords: mulle-uicore, quirks, drawcallback, shadowlayer, cgcolor, cgimage -->
+<!-- keywords: quirks, init, forwarding, shadow, color, bridge, private -->
 # quirks
 
 ## Bootstrap and frame-rate quirks
@@ -28,3 +28,8 @@
 - `CGFramebuffer(UIFramebuffer)` and `CGGraphicsLayer(UILayer)` exist to satisfy protocols. They do not add repo-local behavior beyond that protocol presence. See `src/CGFramebuffer+UIFramebuffer.h`, `src/CGFramebuffer+UIFramebuffer.m`, `src/CGGraphicsLayer+UILayer.h`, and `src/CGGraphicsLayer+UILayer.m`.
 - `CALayer initWithFrame:OSWindow:` ignores the `OSWindow` argument and just calls `initWithFrame:`. Do not assume window-specific layer initialization happens there. See `src/CALayer+UIOSWindow.m`.
 - Keep `src/MulleObjCDeps+MulleUICore.h` public. Its only job is loader dependency exposure for downstream libraries, but removing or privatizing it breaks that contract.
+
+## Private-category naming inconsistency
+
+- `src/UIWindow+CGFramebuffer.m` is named as a UIWindow category, but the implementation declares `@implementation CGContext( UIWindow)` — a private category on `CGContext`, not on `UIWindow`. Do not confuse this file's name with its actual target class. See `src/UIWindow+CGFramebuffer.m`.
+- That file also lacks a public header. It is an internal helper, not part of the public API surface.

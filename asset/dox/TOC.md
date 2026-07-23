@@ -1,250 +1,472 @@
 # MulleUICore Library Documentation for AI
-<!-- Keywords: UI, desktop, mobile, convenience, wrapper, objective-c -->
+<!-- Keywords: UI, desktop, mobile, convenience, forwarding, bridge, objective-c -->
 
 ## 1. Introduction & Purpose
 
-MulleUICore is a high-level convenience library that provides a simplified entry point for developing user interface applications with mulle-objc. It sits atop the MulleUIOS framework and provides an easy-to-use API for creating desktop and mobile user interfaces. The library serves as the main starting point for MulleUICore development, offering streamlined access to window creation, view layout, event handling, drawing operations, and animations.
+MulleUICore is a convenience layer atop MulleUIWindow and MulleGraphics. It
+reduces boilerplate for creating mulle-objc UI applications by providing C
+bootstrap functions, category-based forwarding helpers, and thin bridge shims
+that marry CG-level objects with higher-level UI protocols. It is the
+recommended entry point for writing MulleUI code without widgets and without
+Foundation (which introduces NSString).
 
-MulleUICore is part of the mulle-objc ecosystem and depends on MulleUIOS as its core foundation. It provides factory classes and convenience functions that simplify common UI tasks while leveraging the underlying graphics capabilities provided by nanovg through the MulleUIOS stack.
+With MulleUICore you can:
+
+* run a single-layer drawing app with one C function call
+* manually wire UIApplication/UIWindow/UIView hierarchies with minimal setup
+* forward view-level visual properties (border, background, opacity, rotation)
+  to the backing CGGraphicsLayer
+* add opt-in CAShadowLayer shadows on any UIView
+* set a monochrome window background color via CGColor
+* bridge CGImage, CGFramebuffer, and CGGraphicsLayer to UIImage, UIFramebuffer,
+  and UILayer protocols
+
+MulleUICore depends on MulleUIWindow (which provides UIWindow, UIView, and
+UIApplication) and MulleGraphics (which provides CALayer subclasses and CG
+types).
 
 ## 2. Key Concepts & Design Philosophy
 
-### Simplified API Surface
-MulleUICore's primary design goal is to reduce boilerplate and provide the simplest possible API for common UI tasks. It wraps the more complex MulleUIOS APIs with convenience methods and factory patterns.
+### Category-based convenience, not new class hierarchies
 
-### Color as Values, Not Objects
-Unlike many UI frameworks, MulleUICore treats colors as lightweight CGColor values rather than heavyweight objects. The UIColor class is a factory that produces CGColor structs (which map to nanovg color structs), making color operations efficient and avoiding unnecessary object allocation overhead.
+MulleUICore adds its API through categories on the classes provided by its
+dependencies. It does not introduce new base UI classes. This keeps the
+dependency surface small and the library itself easy to understand.
 
-### Convenience Functions Over Class Hierarchies
-The library provides C convenience functions like `UIApplicationRunDrawCallback()` that encapsulate entire application lifecycles, allowing developers to write simple drawing applications with minimal setup code.
+### Forwarding over duplication
 
-### Integration with mulle-objc Patterns
-MulleUICore follows mulle-objc conventions, including the use of UTF8String methods for string handling, proper memory management patterns, and the avoidance of alloc/init outside of -init methods.
+UIView and UIWindow do not own independent draw-callback or visual state
+in this library. Properties like `drawCallback`, `borderWidth`, `opacity`,
+`cornerInsets`, `rotation`, and `masksToBounds` are forwarded to the
+view's main `CGGraphicsLayer` via mulle-objc forwarding. This avoids
+synchronization bugs between view and layer state.
+
+### Bootstrap functions for common cases
+
+The C functions `UIApplicationRunDrawCallback()` and
+`UIApplicationRunDrawCallbackHz()` encapsulate the entire application
+setup lifecycle for simple single-layer drawing apps. They create the
+application, window, and graphics layer in one call.
+
+### CG/UI bridge shims, not wrappers
+
+Categories like `CGFramebuffer(UIFramebuffer)`, `CGGraphicsLayer(UILayer)`,
+and `CGImage(UIImage)` exist solely to make core-graphics objects conform to
+higher-level UI protocols. They add no repo-local behavior beyond protocol
+adoption.
 
 ## 3. Core API & Data Structures
 
 ### 3.1. `MulleUICore.h`
 
-This is the main umbrella header that provides version information and includes all necessary dependencies.
+Umbrella header providing version information. Includes all dependencies via
+`import.h`.
 
 #### Version Information
-- **`MulleUI_get_version()`**: Returns the complete version as a uint32_t.
-- **`MulleUI_get_version_major()`**: Returns the major version number.
-- **`MulleUI_get_version_minor()`**: Returns the minor version number.
-- **`MulleUI_get_version_patch()`**: Returns the patch version number.
-- **`MULLE_UI_VERSION`**: Compile-time version constant encoded as ((major << 20) | (minor << 8) | patch).
 
-### 3.2. `UIColor.h`
-
-UIColor is a factory class for creating CGColor values (nanovg color structs). It is not meant to be instantiated.
-
-#### Standard Color Factory Methods
-- **`+ (CGColor) blackColor`**: Returns black color (#000000FF).
-- **`+ (CGColor) whiteColor`**: Returns white color (#FFFFFFFF).
-- **`+ (CGColor) redColor`**: Returns red color (#FF0000FF).
-- **`+ (CGColor) greenColor`**: Returns green color (#00FF00FF).
-- **`+ (CGColor) blueColor`**: Returns blue color (#0000FFFF).
-- **`+ (CGColor) grayColor`**: Returns medium gray (#7F7F7FFF).
-- **`+ (CGColor) darkGrayColor`**: Returns dark gray (#3F3F3FFF).
-- **`+ (CGColor) lightGrayColor`**: Returns light gray (#BFBFBFFF).
-- **`+ (CGColor) yellowColor`**: Returns yellow color (#FFFF00FF).
-- **`+ (CGColor) magentaColor`**: Returns magenta color (#FF00FFFF).
-- **`+ (CGColor) brownColor`**: Returns brown color (#8F5F2FFF).
-- **`+ (CGColor) cyanColor`**: Returns cyan color (#00FFFFFF).
-- **`+ (CGColor) orangeColor`**: Returns orange color (#FF7F00FF).
-- **`+ (CGColor) purpleColor`**: Returns purple color (#7F007FFF).
-
-#### Special Colors
-- **`+ (CGColor) underPageBackgroundColor`**: Returns a special gray color for backgrounds (#6B716FFF).
-
-#### Custom Colors
-- **`+ (CGColor) colorWithCGColor:(CGColor) cgColor`**: Pass-through method that returns the provided CGColor.
-- **`+ (CGColor) colorWithUTF8String:(char *) name`**: Creates a color from a string name by delegating to `CGColorMakeWithUTF8String()`.
-
-**Important:** UIColor cannot be instantiated. Attempting to call `alloc` or `init` will trigger an assertion failure. All methods are class methods that return CGColor values.
-
-### 3.3. `UIApplication+UIWindow.h`
-
-Provides high-level C functions for running simple UI applications with minimal boilerplate.
-
-#### Application Lifecycle Functions
-
-##### `UIApplicationRunDrawCallback()`
 ```c
-int UIApplicationRunDrawCallback( CGGraphicsLayerDrawCallback_t *callback,
-                                  CGSize windowSize,
-                                  CGSize canvasSize,
-                                  char *title,
-                                  CGFloat frameRate)
+#define MULLE_UI_CORE_VERSION  ((0 << 20) | (0 << 8) | 1)
+#define MULLE_UI_VERSION       ((0 << 20) | (7 << 8) | 56)
+
+static inline unsigned int   MulleUI_get_version_major( void);
+static inline unsigned int   MulleUI_get_version_minor( void);
+static inline unsigned int   MulleUI_get_version_patch( void);
+extern uint32_t              MulleUI_get_version( void);
 ```
-Creates a complete application with a window containing a graphics layer with the specified draw callback. This is the lowest-level convenience function.
+
+- `MULLE_UI_CORE_VERSION` — compile-time version of this library
+- `MULLE_UI_VERSION` — compile-time version of the MulleUI family
+- `MulleUI_get_version()` — runtime version as uint32_t
+- `_major/_minor/_patch` — decoded version components
+
+### 3.2. `UIApplication+UIWindow.h`
+
+Bootstrap C functions that create a complete single-layer drawing application
+with one call. These are the shortest path from zero to a running window.
+
+#### `UIApplicationRunDrawCallback()`
+
+```c
+int  UIApplicationRunDrawCallback( CGGraphicsLayerDrawCallback_t *callback,
+                                   CGSize windowSize,
+                                   CGSize canvasSize,
+                                   char *title,
+                                   CGFloat frameRate);
+```
+
+Creates a UIApplication, UIWindow, and CGGraphicsLayer with the given draw
+callback. This is the lower-level convenience function that allows specifying
+canvas size separately from window size.
 
 **Parameters:**
-- `callback`: Drawing callback function pointer.
-- `windowSize`: Size of the window (defaults to 640x400 if zero).
-- `canvasSize`: Size of the drawing canvas (defaults to windowSize if zero).
-- `title`: Window title as UTF-8 string.
-- `frameRate`: Frame rate control (use `UIWindowFrameRateAsync`, `UIWindowFrameRateSynced`, or a specific rate).
+- `callback` — draw function of type `CGGraphicsLayerDrawCallback_t`
+- `windowSize` — window dimensions (defaults to 640x400 if zero)
+- `canvasSize` — drawing canvas dimensions (defaults to windowSize if zero);
+  when non-zero, also overwrites layer `bounds` and `canvas`
+- `title` — window title as UTF-8 C string
+- `frameRate` — `UIWindowFrameRateAsync`, `UIWindowFrameRateSynced`, or
+  an explicit interval in seconds
 
-**Returns:** Exit code from the application run loop.
+**Returns:** exit code from the application run loop.
 
-##### `UIApplicationRunDrawCallbackHz()` (inline)
+**Implementation notes:** This function always clears `UIWindowStylePlanes`
+and forces `UIWindowStyleInputPolling`. It calls `[UIApplication sharedInstance]`
+internally, so callers do not need to initialize the backend first.
+
+**Frame rate constants:**
 ```c
-static inline int UIApplicationRunDrawCallbackHz( CGGraphicsLayerDrawCallback_t *callback,
-                                                  CGSize windowSize,
-                                                  char *title,
-                                                  CGFloat hz)
+UIWindowFrameRateAsync    // no frame limiting
+UIWindowFrameRateSynced   // sync to display refresh (VSync)
 ```
-Even simpler variant that takes a frequency in Hertz and enables mouse polling automatically.
+
+#### `UIApplicationRunDrawCallbackHz()`
+
+```c
+static inline int
+      UIApplicationRunDrawCallbackHz( CGGraphicsLayerDrawCallback_t *callback,
+                                      CGSize windowSize,
+                                      char *title,
+                                      CGFloat hz);
+```
+
+Inline convenience wrapper that converts hertz to frameRate. Call this when
+you have a frequency rather than an interval.
 
 **Parameters:**
-- `callback`: Drawing callback function pointer.
-- `windowSize`: Size of the window.
-- `title`: Window title as UTF-8 string.
-- `hz`: Refresh frequency (0.0 for async, negative for synced, positive for specific Hz).
+- `callback` — draw function
+- `windowSize` — window dimensions
+- `title` — window title as UTF-8 C string
+- `hz` — refresh frequency: `0.0` → async, `<0.0` → synced to display,
+  `>0.0` → interval = `1.0 / hz`
 
-**Returns:** Exit code from the application run loop.
+**Returns:** exit code from the application run loop.
 
-**Note:** This inline function converts Hz to frameRate and automatically enables mouse polling by setting appropriate style masks.
+### 3.3. `UIView+CGGraphicsLayer.h`
 
-#### Frame Rate Constants
-- **`UIWindowFrameRateAsync`**: Run asynchronously without frame rate limiting.
-- **`UIWindowFrameRateSynced`**: Sync to display refresh rate (VSync).
+Forwarding category that maps UIView-level property access to the backing
+`CGGraphicsLayer`. The category name is `CGGraphicsLayerForwarding` and it
+adopts `<MulleObjCForwarding>`. A `UIView` does not store these properties
+itself — they are all forwarded to `[self mainLayer]`.
 
-### 3.4. `MulleObjCLoader+MulleUICore.h`
+```objc
+@interface UIView( CGGraphicsLayerForwarding) < MulleObjCForwarding>
 
-Provides the loader interface for the MulleUICore library in the mulle-objc runtime.
+@property( forward, assign) CGGraphicsLayerDrawCallback_t   *drawCallback;
+@property( forward, observable) MulleCornerInsets           cornerInsets;
+@property( forward, observable) CGFloat                     borderWidth;
+@property( forward, observable) CGFloat                     opacity;
+@property( forward, observable) CGPaint                     *borderPaint;
+@property( forward, observable) CGPaint                     *backgroundPaint;
+@property( forward, observable) CGPoint                     anchorPoint;
+@property( forward, observable) CARotation                  rotation;
+@property( forward, assign) BOOL                            masksToBounds;
+```
 
-#### MulleObjCLoader Category
-- **`+ (struct _mulle_objc_dependency *) dependencies`**: Returns the dependency information for proper library loading order in the mulle-objc runtime.
+**Implementation note:** `+layerClass` is hard-wired to `CGGraphicsLayer`. The
+layout context used during forwarding is thread-local under the key
+`"UILayoutContext"`, not window-local.
 
-This header is required to be public to allow other libraries that depend on MulleUICore to properly declare their load dependencies.
+The `@optional` section provides methods that may or may not be available at
+runtime depending on the actual layer class:
+
+```objc
+@optional
+- (void) setBorderColor:(CGColor) color;
+- (void) setBackgroundColor:(CGColor) color;
+- (void) setCornerRadius:(CGFloat) radius;
+@end
+```
+
+### 3.4. `UIWindow+CGGraphicsLayer.h`
+
+Draw-callback proxy on UIWindow. The window does not store its own draw
+callback; `setDrawCallback:` forwards to `[self contentView]` and asserts
+if there is no content view.
+
+```objc
+@interface UIWindow( CGGraphicsLayer)
+
+@property( dynamic) CGGraphicsLayerDrawCallback_t    *drawCallback;
+
+@end
+```
+
+### 3.5. `UIWindow+CGColor.h`
+
+Window background color support. Only monochrome colors work —
+the implementation stores a single hex color internally. Gradient or
+patterned paints lose detail because `setBackgroundPaint:` stores only
+`[paint mainColor]`.
+
+```objc
+@interface UIWindow( CGColor)
+
+@property( assign, dynamic) CGColor   backgroundColor;
+
+// only monochrome colors possible
+- (CGPaint *) backgroundPaint;
+- (void) setBackgroundPaint:(CGPaint *) paint;
+
+@end
+```
+
+### 3.6. `UIView+CAShadowLayer.h`
+
+Opt-in shadow layer on UIView. Call `setShowsShadow:YES` before accessing
+`shadowLayer` — it asserts if the shadow has not been enabled.
+
+```objc
+@interface UIView( CAShadowLayer)
+
+- (void) setShowsShadow:(BOOL) flag;
+- (BOOL) isShowingShadow;
+
+// this will assert, if isShowingShadow returns NO
+- (CAShadowLayer *) shadowLayer;
+
+@end
+```
+
+**Implementation notes:** The shadow layer's frame is extruded by
+`shadowInsets`, so the shadow can paint outside the view's nominal rectangle.
+
+### 3.7. `CALayer+UIOSWindow.h`
+
+Layer initializer that accepts an `<UIOSWindow>` argument but ignores it
+entirely. This exists for protocol conformance compatibility.
+
+```objc
+@interface CALayer( UIOSWindow) < MulleUINamedObject>
+
+- (instancetype) initWithFrame:(CGRect) frame
+                      OSWindow:(id <UIOSWindow>) window;
+@end
+```
+
+### 3.8. `CGImage+UIImage.h`
+
+Bridge shim that makes CGImage conform to `<UIImage>`. Its only behavioral
+addition: `CAImageLayer` is set as the preferred image layer class. This is
+a protocol bridge, not an image-loading API.
+
+```objc
+@interface CGImage( UIImage) <UIImage>
+@end
+```
+
+### 3.9. `CGFramebuffer+UIFramebuffer.h`
+
+Bridge shim that makes CGFramebuffer conform to `<UIFramebuffer>`. Adds no
+repo-local behavior beyond protocol adoption.
+
+```objc
+@interface CGFramebuffer( UIFramebuffer) <UIFramebuffer>
+@end
+```
+
+### 3.10. `CGGraphicsLayer+UILayer.h`
+
+Bridge shim that makes CGGraphicsLayer conform to `<UILayer>`. Adds no
+repo-local behavior beyond protocol adoption.
+
+```objc
+@interface CGGraphicsLayer( UILayer) <UILayer>
+@end
+```
+
+### 3.11. `MulleObjCDeps+MulleUICore.h`
+
+Loader dependency declaration for the mulle-objc runtime. **Must remain public**
+because downstream libraries use it to declare their load dependencies.
+
+```objc
+@interface MulleObjCDeps( MulleUICore)
+
++ (struct _mulle_objc_dependency *) dependencies;
+
+@end
+```
+
+### 3.12. Private: `UIWindow+CGFramebuffer.m`
+
+This file has no public header. Despite the filename, the implementation
+declares `@implementation CGContext( UIWindow)` — a private category on
+`CGContext`, not on UIWindow. It provides one method:
+
+```objc
+- (id <UIImage>) imageWithFramebuffer:(id <UILayer>) framebuffer
+                       nameUTF8String:(char *) nameUTF8String;
+```
+
+Do not confuse this file's name with its actual target class.
 
 ## 4. Performance Characteristics
 
-### Color Operations
-- **O(1)** - All UIColor factory methods return colors in constant time by using compile-time constants with `CGColorMakeWithHexColor()`.
-- **No allocation** - Colors are value types (structs), not heap-allocated objects, eliminating GC overhead.
+### Bootstrap functions
+- **Constant-time setup** — `UIApplicationRunDrawCallback` creates exactly one
+  application, one window, and one layer. No iteration or complex allocation.
+- **Frame rate control** — async (no limiting), VSync, or explicit interval.
 
-### Application Lifecycle
-- **Minimal overhead** - The convenience functions `UIApplicationRunDrawCallback()` create only the essential objects needed for the application to run (one layer, one window, one application instance).
-- **Frame rate control** - Applications can run in async mode (no frame limiting), VSync mode (display synchronized), or at a specific frame rate.
+### Forwarding overhead
+- Properties forwarded through `<MulleObjCForwarding>` add one level of
+  indirection per access. The forwarding target is the main layer, resolved
+  once per property chain.
+- View-level `setBackgroundColor:` etc. are `@optional` and dispatch through
+  the runtime; if the main layer's class does not implement them the message
+  is silently ignored.
 
-### Thread Safety
-- MulleUICore follows the standard mulle-objc pattern: **not thread-safe by default**. All UI operations should occur on the main thread.
-- The underlying MulleUIOS framework handles platform-specific threading for window and event management.
+### Thread safety
+- Not thread-safe. All UI operations must occur on the main thread.
+- The layout context used by `UIView+CGGraphicsLayer` is thread-local, not
+  window-local.
 
 ## 5. AI Usage Recommendations & Patterns
 
 ### Best Practices
 
-1. **Use UIColor as a Factory, Never Instantiate**: Always call class methods on UIColor. Never attempt to create UIColor instances with `alloc` or `init`.
+1. **Use the bootstrap functions for single-layer drawing apps.** Prefer
+   `UIApplicationRunDrawCallbackHz()` — it is one call. Only drop to the
+   full `UIApplication`/`UIWindow`/`UIView` path when you need retained mode,
+   autoresizing, or explicit content-view setup.
 
-2. **Prefer Convenience Functions for Simple Applications**: For simple drawing applications, use `UIApplicationRunDrawCallbackHz()` instead of manually creating UIApplication, UIWindow, and UIView hierarchies.
+2. **Put draw callbacks on the UIView, not the UIWindow.** The window
+   forwarding through `UIWindow+CGGraphicsLayer` merely proxies to the
+   content view and asserts without one.
 
-3. **Import Properly**: Use `#import "import.h"` in source files to get all necessary dependencies. The `import.h` header automatically includes MulleUIOS and all required headers.
+3. **Enable shadows before accessing the shadow layer.** `[view shadowLayer]`
+   asserts if `[view setShowsShadow:YES]` was not called first.
 
-4. **Use UTF8String Methods**: All string methods in MulleUICore use UTF-8 encoding. Use methods like `titleUTF8String:` rather than NSString-based APIs for better performance.
+4. **Use direct CGColor values for window backgrounds.** The window background
+   paint is monochrome-only. Gradient or patterned paints lose detail.
 
-5. **Follow mulle-buffer Patterns**: Use `mulle_buffer_do()` macro for automatic buffer cleanup when working with temporary string buffers.
+5. **Import via `import.h`.** The project's `import.h` (in `src/generic/`)
+   brings in all necessary dependencies.
 
-6. **Set Frame Rates Appropriately**: 
-   - Use 0.0 Hz (async) for event-driven applications that only redraw when needed.
-   - Use negative Hz (synced) for smooth animations that should match the display refresh rate.
-   - Use specific Hz values (e.g., 1.0, 30.0, 60.0) for controlled update rates.
+6. **Keep `MulleObjCDeps+MulleUICore.h` public.** It exists solely for
+   downstream loader dependency chains.
 
 ### Common Pitfalls
 
-1. **Don't Mix Color Objects and Values**: UIColor returns CGColor values, not objects. Don't try to retain, release, or store them in object collections. Use NSValue if you need to wrap them.
+1. **UIColor is NOT in this library.** It comes from a dependency
+   (MulleGraphics or MulleUIWindow). Do not document or use it as a
+   MulleUICore symbol.
 
-2. **Don't Forget Shared Instance**: Always get `[UIApplication sharedInstance]` before creating windows to ensure proper initialization of the underlying graphics system (GLFW/SDL).
+2. **`UIWindow+CGFramebuffer.m` is named for UIWindow but the class is
+   CGContext.** Do not import or use it — it has no public header.
 
-3. **Avoid Direct Instantiation**: Don't use `[[UIColor alloc] init]` - it will fail with an assertion. This is by design.
+3. **The draw callback on UIWindow assumes a content view exists.**
+   Calling `[window setDrawCallback:...]` before `[window setView:...]`
+   will assert.
 
-4. **Frame Rate vs Hz Confusion**: Remember that frameRate is the interval (1/Hz), while Hz is the frequency. The convenience function `UIApplicationRunDrawCallbackHz()` takes Hz and converts it properly.
+4. **Don't rely on thread-local layout context across windows.** The layout
+   context is thread-local under `"UILayoutContext"`, not window-local.
+
+5. **Frame rate vs Hz:** `UIApplicationRunDrawCallback` takes `frameRate`
+   (interval in seconds). `UIApplicationRunDrawCallbackHz` takes `hz`
+   (frequency). `0.0` Hz = async, `<0.0` Hz = synced.
 
 ### Idiomatic Usage
 
-**Minimal Application Pattern:**
-```objective-c
-// Use the convenience function for simple drawing apps
-int main( int argc, char *argv[])
+**Minimal drawing app:**
+```c
+static BOOL   drawCircle( CGGraphicsLayer *layer, CGContext *context)
 {
-   return( UIApplicationRunDrawCallbackHz( myDrawFunction,
-                                          CGSizeMake( 640, 480),
-                                          "My App",
-                                          60.0));  // 60 Hz refresh
+   return( YES);
+}
+
+int   main( int argc, char *argv[])
+{
+   return( UIApplicationRunDrawCallbackHz( drawCircle,
+                                           CGSizeMake( 640, 480),
+                                           "Demo",
+                                           60.0));
 }
 ```
 
-**Standard Application Pattern:**
-```objective-c
-// More control over window and view setup
-int main( int argc, char *argv[])
-{
-   UIApplication   *app;
-   UIWindow        *window;
-   UIView          *view;
-   CALayer         *layer;
-   
-   app = [UIApplication sharedInstance];
-   
-   layer = [CATextLayer layerWithFrame:CGRectMake( 0, 0, 320, 240)];
-   [layer setBackgroundColor:[UIColor blueColor]];
-   
-   view = [UIView viewWithLayer:layer];
-   
-   window = [UIWindow windowWithFrame:CGRectMake( 0, 0, 320, 240)
-                      titleUTF8String:"Demo"
-                            styleMask:UIWindowStyleMaskDefault];
-   [window setView:view];
-   [window setFrameRateHz:60.0];
-   
-   [app addWindow:window];
-   return( [app runApp]);
-}
+**View with forwarded styling:**
+```c
+view  = [UIView viewWithLayer:[CGGraphicsLayer layerWithFrame:frame]];
+[view setBackgroundColor:CGColorMakeBlue()];   // forwarded to layer
+[view setBorderColor:CGColorMakeWhite()];
+[view setBorderWidth:1.0];
+[view setCornerRadius:8.0];
+[view setMasksToBounds:YES];
 ```
 
-**Color Usage Pattern:**
-```objective-c
-// Always use class methods
-CGColor blue = [UIColor blueColor];
-CGColor customColor = [UIColor colorWithUTF8String:"#FF8800FF"];
+**Shadow on a view:**
+```c
+[view setShowsShadow:YES];
+shadowLayer = [view shadowLayer];
+```
 
-[layer setBackgroundColor:blue];
-[layer setTextColor:customColor];
-
-// Don't wrap in objects unless necessary
-// If needed for collections, use NSValue
-NSValue *colorValue = [NSValue valueWithBytes:&blue
-                                      objCType:@encode(CGColor)];
+**Manual window setup:**
+```c
+app       = [UIApplication sharedInstance];
+window    = [UIWindow windowWithFrame:frame
+                     titleUTF8String:"Demo"
+                           styleMask:styleMask];
+view      = [UIView viewWithLayer:layer];
+[view setAutoresizingMask:UIViewAutoresizingFlexibleWidth
+                          |UIViewAutoresizingFlexibleHeight];
+[view setDrawCallback:myDrawCallback];
+[window setView:view];
+[window setFrameRateHz:1.0];
+[app addWindow:window];
+return( [app runApp]);
 ```
 
 ## 6. Integration Examples
 
-### Example 1: Minimal Animation Counter
+### Example 1: Minimal Single-Layer Animation
 
-This example demonstrates the simplest way to create an animated UI that updates once per second.
+Demonstrates the shortest path to a running animated window.
 
 ```c
 #import "import.h"
 
 static BOOL   updateText( CGGraphicsLayer *layer, CGContext *context)
 {
-   CATextLayer   *textLayer;
+   CATextLayer   *textLayer = (CATextLayer *) layer;
    char          *s;
 
-   textLayer = (CATextLayer *) layer;
-   
    mulle_buffer_do( buffer)
    {
       mulle_buffer_sprintf( buffer, "%td", [context numberOfFrames]);
-      s  = mulle_buffer_get_string( buffer);
+      s = mulle_buffer_get_string( buffer);
       [textLayer setTextUTF8String:s];
    }
-   return( YES);   
+   return( YES);
 }
 
+int   main( int argc, char *argv[])
+{
+   return( UIApplicationRunDrawCallbackHz( updateText,
+                                           CGSizeMake( 320, 320),
+                                           "Counter",
+                                           1.0));
+}
+```
+
+### Example 2: Manual Window with Retained Mode
+
+Shows the explicit UIApplication/UIWindow/UIView path with autoresizing.
+
+```c
+#import "import.h"
+
+static BOOL   updateText( CGGraphicsLayer *layer, CGContext *context)
+{
+   CATextLayer   *textLayer = (CATextLayer *) layer;
+   char          *s;
+
+   mulle_buffer_do( buffer)
+   {
+      mulle_buffer_sprintf( buffer, "%td", [context numberOfFrames]);
+      s = mulle_buffer_get_string( buffer);
+      [textLayer setTextUTF8String:s];
+   }
+   return( YES);
+}
 
 int   main( int argc, char *argv[])
 {
@@ -255,10 +477,9 @@ int   main( int argc, char *argv[])
    CATextLayer     *layer;
    NSUInteger      styleMask;
 
-   app     = [UIApplication sharedInstance];
-   frame   = CGRectMake( 0.0, 0.0, 320.0, 320.0);
-   
-   styleMask = (UIWindowStyleMaskDefault & ~UIWindowStylePlanes) 
+   app       = [UIApplication sharedInstance];
+   frame     = CGRectMake( 0.0, 0.0, 320.0, 320.0);
+   styleMask = (UIWindowStyleMaskDefault & ~UIWindowStylePlanes)
                | UIWindowStyleRetained;
 
    window = [UIWindow windowWithFrame:frame
@@ -276,19 +497,18 @@ int   main( int argc, char *argv[])
    [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth
                              |UIViewAutoresizingFlexibleHeight];
    [view setDrawCallback:updateText];
-   
+
    [window setView:view];
    [window setFrameRateHz:1.0];
-   
    [app addWindow:window];
-   
+
    return( [app runApp]);
 }
 ```
 
-### Example 2: Using Color Factory Methods
+### Example 3: View Styling via Forwarding
 
-This example shows how to use UIColor as a factory for various colors.
+Demonstrates that UIView-level visual properties are forwarded to the layer.
 
 ```c
 #import "import.h"
@@ -298,71 +518,35 @@ int   main( int argc, char *argv[])
    UIApplication   *app;
    UIWindow        *window;
    UIView          *view;
-   CALayer         *layer;
+   CGGraphicsLayer *layer;
    CGRect          frame;
 
    app   = [UIApplication sharedInstance];
    frame = CGRectMake( 0, 0, 400, 300);
 
-   layer = [CALayer layerWithFrame:frame];
-   
-   // Use standard color factories
-   [layer setBackgroundColor:[UIColor darkGrayColor]];
-   [layer setBorderColor:[UIColor orangeColor]];
-   [layer setBorderWidth:5.0];
-   
-   view = [UIView viewWithLayer:layer];
-   
+   layer = [CGGraphicsLayer layerWithFrame:frame];
+   view  = [UIView viewWithLayer:layer];
+
+   [view setBorderColor:CGColorMakeOrange()];
+   [view setBorderWidth:5.0];
+   [view setCornerRadius:12.0];
+   [view setOpacity:0.8];
+   [view setMasksToBounds:YES];
+
    window = [UIWindow windowWithFrame:frame
-                      titleUTF8String:"Color Demo"
+                      titleUTF8String:"Styled View"
                             styleMask:UIWindowStyleMaskDefault];
    [window setView:view];
    [window setFrameRateHz:60.0];
-   
    [app addWindow:window];
-   
+
    return( [app runApp]);
 }
 ```
 
-### Example 3: Ultra-Simple Drawing Application
+### Example 4: Shadow Layer
 
-This example demonstrates the absolute minimal code needed to create a drawing application using the convenience function.
-
-```c
-#import "import.h"
-
-static BOOL   drawCircle( CGGraphicsLayer *layer, CGContext *context)
-{
-   CGRect   bounds;
-   
-   bounds = [layer bounds];
-   
-   // Draw a circle in the center
-   CGContextBeginPath( context);
-   CGContextCircle( context, 
-                   bounds.size.width / 2.0,
-                   bounds.size.height / 2.0,
-                   100.0);
-   CGContextSetFillColor( context, [UIColor redColor]);
-   CGContextFill( context);
-   
-   return( YES);
-}
-
-
-int   main( int argc, char *argv[])
-{
-   return( UIApplicationRunDrawCallbackHz( drawCircle,
-                                          CGSizeMake( 640, 480),
-                                          "Circle Demo",
-                                          0.0));  // async, no animation
-}
-```
-
-### Example 4: Custom Color with String
-
-This example shows how to create custom colors from string specifications.
+Shows opt-in shadow on a UIView.
 
 ```c
 #import "import.h"
@@ -372,51 +556,44 @@ int   main( int argc, char *argv[])
    UIApplication   *app;
    UIWindow        *window;
    UIView          *view;
-   CATextLayer     *textLayer;
+   CAShadowLayer   *shadowLayer;
    CGRect          frame;
-   CGColor         customBg;
-   CGColor         customFg;
 
    app   = [UIApplication sharedInstance];
-   frame = CGRectMake( 0, 0, 500, 200);
+   frame = CGRectMake( 0, 0, 300, 300);
 
-   // Create custom colors from hex strings
-   customBg = [UIColor colorWithUTF8String:"#2C3E50"];
-   customFg = [UIColor colorWithUTF8String:"#ECF0F1"];
+   view = [UIView viewWithFrame:frame];
+   [view setShowsShadow:YES];
 
-   textLayer = [CATextLayer layerWithFrame:frame];
-   [textLayer setBackgroundColor:customBg];
-   [textLayer setTextColor:customFg];
-   [textLayer setTextUTF8String:"Custom Colors"];
-   [textLayer setTextAlignment:UITextAlignmentCenter];
-   
-   view = [UIView viewWithLayer:textLayer];
-   
+   shadowLayer = [view shadowLayer];
+   [shadowLayer setShadowColor:CGColorMakeBlack()];
+   [shadowLayer setShadowOffset:CGSizeMake( 4, 4)];
+   [shadowLayer setShadowBlur:8.0];
+   [shadowLayer setShadowOpacity:0.5];
+
    window = [UIWindow windowWithFrame:frame
-                      titleUTF8String:"Custom Color Demo"
+                      titleUTF8String:"Shadow Demo"
                             styleMask:UIWindowStyleMaskDefault];
    [window setView:view];
-   
    [app addWindow:window];
-   
+
    return( [app runApp]);
 }
 ```
 
 ## 7. Dependencies
 
-MulleUICore has the following direct dependencies within the mulle-sde ecosystem:
+Direct mulle-sde dependencies from sourcetree config:
 
-- **MulleUIOS**: The core UI framework that provides UIWindow, UIView, UIEvent, CALayer, CAAnimation, UIApplication, and all the underlying graphics capabilities through nanovg integration.
+- **MulleUIWindow** — provides UIWindow, UIView, UIApplication, and the
+  base window/view/layer hierarchy
+- **MulleGraphics** — provides CALayer subclasses (CGGraphicsLayer,
+  CATextLayer, CAShadowLayer, CAImageLayer, CGFramebuffer) and CG types
+  (CGColor, CGPaint, CGContext, CGImage, CGSize, CGRect, etc.)
+- **mulle-objc-list** — build-time dependency for Objective-C class listing
+  (marked no-all-load, no-header, no-link, no-singlephase)
 
-- **mulle-objc-list**: Build-time dependency for Objective-C class listing (marked as no-link, no-header).
-
-MulleUIOS itself transitively depends on many other libraries including:
-- MulleObjC (Objective-C runtime)
-- mulle-core (foundational C libraries)
-- MulleGraphics, MulleCG, MulleCA (graphics and Core Animation)
-- MulleGLFW (window management via GLFW)
-- mulle-gfx (nanovg integration)
-- Various support libraries (mulle-freetype, MulleThread, etc.)
-
-However, as a MulleUICore user, you typically only need to be aware of MulleUICore and MulleUIOS, as the build system automatically handles transitive dependencies.
+Transitively through MulleUIWindow and MulleGraphics, the following are
+also available: MulleObjC (runtime), mulle-core (foundational C libraries),
+MulleCG, MulleCA, MulleGLFW, mulle-gfx (nanovg integration), mulle-freetype,
+MulleThread, and others.

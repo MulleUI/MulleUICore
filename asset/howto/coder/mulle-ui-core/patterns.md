@@ -1,4 +1,4 @@
-<!-- keywords: mulle-uicore, patterns, uiwindow, uiview, calayer, cggraphicslayer -->
+<!-- keywords: bootstrap, window, view, layer, shadow, forwarding, bridge -->
 # patterns
 
 ## Bootstrap a one-layer app fast
@@ -89,12 +89,39 @@ view = [UIView viewWithLayer:[CGGraphicsLayer layerWithFrame:frame]];
 - Comparison: this feels UIKit-like, but the state still lives on the layer side in this repo.
 - Keep view styling at the view/category surface unless you are intentionally replacing the underlying layer behavior.
 
+## Set the window background color
+
+`src/UIWindow+CGColor.h` exposes a monochrome-only background. The implementation stores a hex color internally and derives the paint from it.
+
+```objective-c
+[window setBackgroundColor:CGColorMakeWhite()];
+// or via paint — but only the mainColor survives:
+CGPaint *paint = [CGPaint paintWithCGColor:CGColorMakeRed()];
+[window setBackgroundPaint:paint];
+```
+
+- The header comment says "only monochrome colors possible". Gradient or patterned paints lose detail because `setBackgroundPaint:` stores only `[paint mainColor]`. See `src/UIWindow+CGColor.m`.
+- Use `CGColor` values directly unless you need `CGPaint` interop elsewhere.
+
+## Add shadows on views
+
+Opt in, then access the layer. See `src/UIView+CAShadowLayer.h` and `src/UIView+CAShadowLayer.m`.
+
+```objective-c
+[view setShowsShadow:YES];
+CAShadowLayer *shadow = [view shadowLayer];
+```
+
+- `shadowLayer` asserts unless `setShowsShadow:YES` was called first.
+- The shadow layer's frame is extruded by `shadowInsets`, so the shadow can paint outside the view's nominal rectangle.
+
 ## Add repo-local helpers on top of the view/layer pair
 
 - Enable shadows with `[view setShowsShadow:YES]` before asking for `[view shadowLayer]`; the helper is opt-in in `src/UIView+CAShadowLayer.m`.
 - Use `[window setBackgroundColor:...]` for solid backgrounds. `src/UIWindow+CGColor.m` stores hex color, so plain `CGColor` values are the happy path.
 - Let `CGImage` choose its UI layer class. `src/CGImage+UIImage.m` fixes `CAImageLayer` as the preferred image layer.
 - Use `CGFramebuffer` and `CGGraphicsLayer` directly when higher-level code asks for `UIFramebuffer` or `UILayer`; these categories are bridge glue, not wrapper subsystems.
+- Keep `MulleObjCDeps(MulleUICore)` header public — downstream libraries use it to declare their load dependencies.
 
 ## Drop below MulleUICore only for backend control
 
