@@ -1,8 +1,8 @@
 //
-//  MulleUIOS.m
-//  MulleUIOS
+//  UIView+CGGraphicsLayer.m
+//  MulleUICore
 //
-//  Copyright (c) 2021 Nat! - Mulle kybernetiK.
+//  Copyright (c) 2026 Nat! - Mulle kybernetiK.
 //  Copyright (c) 2021 Codeon GmbH.
 //  All rights reserved.
 //

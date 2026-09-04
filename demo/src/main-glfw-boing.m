@@ -684,7 +684,6 @@ static void   receiveWindowEvents( GLFWOSWindow *window, UIWindowEvent *event)
 
 static void   receiveOtherEvents( GLFWOSWindow *window, UIEvent *event)
 {
-   CGPoint   scrollOffset;
    CGPoint   position;
 
    switch( [event eventType])
@@ -740,7 +739,7 @@ int main( void )
       gWindow = [GLFWOSWindow windowWithFrame:CGRectMake( 0, 0 , 400, 400)
                               titleUTF8String:"Demo"
                                     styleMask:styleMask
-                                graphicsHints:0];
+                                graphicsHints:(UIOSWindowGraphicsHints) { 0 }];
       window = [gWindow os_window];
       if (!window)
       {

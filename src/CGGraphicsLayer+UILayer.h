@@ -1,8 +1,8 @@
 //
-//  MulleUIOS.m
-//  MulleUIOS
+//  CGGraphicsLayer+UILayer.h
+//  MulleUICore
 //
-//  Copyright (c) 2021 Nat! - Mulle kybernetiK.
+//  Copyright (c) 2026 Nat! - Mulle kybernetiK.
 //  Copyright (c) 2021 Codeon GmbH.
 //  All rights reserved.
 //
@@ -33,7 +33,6 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 //  POSSIBILITY OF SUCH DAMAGE.
 //
-
 #import "import.h"
 
 

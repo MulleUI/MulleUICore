@@ -37,7 +37,8 @@ The UIWindow then calls its own receiveRetainedEvent: method, passing the new
 UIMouseButtonEvent object. This kicks off the event handling and propagation process.
 
 Inside receiveRetainedEvent:, the UIWindow checks if the event target is
-itself or if it should be propagated down to a subview.events like window resize.
+itself or if it should be propagated down to a subview. Events like window
+resize are handled by the window itself.
 For a mouse click, the UIWindow will likely return NO from willHandleEvent:
 indicating the event should be passed down the view hierarchy.
 

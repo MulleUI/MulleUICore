@@ -1,0 +1,55 @@
+## Usage
+
+MulleUICore is the minimal amount of glue to put a `UIWindow`, a `UIView`
+and a `CALayer` together and run the event loop:
+
+``` objc
+#import <MulleUICore/MulleUICore.h>
+
+static BOOL   draw( CGGraphicsLayer *layer, CGContext *context)
+{
+   CGContextStrokeRectWithColor( context,
+                                 CGRectInset( [layer canvas], 8, 8),
+                                 4.0,
+                                 CGColorMakeRed());
+   return( NO);
+}
+
+
+int  main( void)
+{
+   UIApplication    *app;
+   UIWindow         *window;
+   UIView           *view;
+   CGGraphicsLayer  *layer;
+
+   app = [UIApplication sharedInstance];
+
+   window = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, 320.0, 320.0)
+                      titleUTF8String:"Demo"
+                            styleMask:UIWindowStyleMaskDefault];
+
+   layer = [CGGraphicsLayer layerWithFrame:CGRectMake( 10.0, 10.0, 300.0, 300.0)];
+   [layer setDrawCallback:draw];
+
+   view = [UIView viewWithLayer:layer];
+   [[window contentView] addSubview:view];
+
+   [app addWindow:window];
+   return( [app runApp]);
+}
+```
+
+The window drives the frame loop: it creates the layers and their `CGContext`s
+for you and calls each draw callback once per frame. Return `NO` from the
+callback to preempt the layer's own drawing, or `YES` to draw underneath it
+(see [MulleGraphics](//github.com/MulleUI/MulleGraphics)).
+
+## Build the demo
+
+The `demo/` folder is a [mulle-sde](//github.com/mulle-sde) project:
+
+``` sh
+cd demo
+mulle-sde craft
+```

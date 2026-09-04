@@ -1,28 +1,32 @@
 # MulleUICore
 
+Part of [MulleUI](https://github.com/MulleUI) — UIKit-shaped modular GUI libraries for mulle-objc.
+
 #### 🌀 UI for mulle-objc - Desktop and Mobile
 
-# MulleUI
-
-** TODO: move the code to other places use the name MulleUI to comprise
-** MulleUIImage, MulleUIVideo and MulleUIFoundation
-**
-
-#### 🌀 Fundamental UI for mulle-objc - Desktop and Mobile
-
-This library adds some convenience atop of MulleUIOS. It is the main starting
-point for developing MulleUI code without widgets and without the Foundation
-(which introduces NSString).
+This library combines MulleUIWindow (windows, views, events) with MulleGraphics
+(CALayer) into a single framework. It is the main starting point for developing
+MulleUI code without widgets and without the Foundation (which introduces
+NSString).
 
 With MulleUI you can
 
 * create windows with **UIWindow**
 * layout window contents with **UIView**
-* handle events as an **UIEvent** in your UIView
+* handle events as a **UIEvent** in your UIView
 * do drawings in your UIView with **CALayer**
 * animate your UIView or CALayer with **CAAnimation**
 
 MulleUI will utilize a platform specific drawing library variant of **nanovg**.
+
+For exact fills and strokes, see
+[MulleCG's pixel-perfect rectangles](//github.com/MulleUI/MulleCG#how-to-draw-pixel-perfect-rectangles).
+
+> #### Note
+>
+> MulleUICore includes MulleCA. Both MulleCA and MulleCG pull in the CGColor
+> typedef, so keep MulleGraphics before MulleUICore in your dependency list to
+> preserve the required order (see MulleCG's README).
 
 
 
@@ -35,6 +39,68 @@ MulleUI will utilize a platform specific drawing library variant of **nanovg**.
 
 
 
+## Documentation & Guides
+
+* [API Summary](asset/dox/api/toc)
+* [Coder Guide](asset/howto/coder/mulle-ui-core)
+* [Debugger Guide](asset/howto/debugger/mulle-ui-core)
+* [Verifier Guide](asset/howto/verifier/mulle-ui-core)
+
+## Usage
+
+MulleUICore is the minimal amount of glue to put a `UIWindow`, a `UIView`
+and a `CALayer` together and run the event loop:
+
+``` objc
+#import <MulleUICore/MulleUICore.h>
+
+static BOOL   draw( CGGraphicsLayer *layer, CGContext *context)
+{
+   CGContextStrokeRectWithColor( context,
+                                 CGRectInset( [layer canvas], 8, 8),
+                                 4.0,
+                                 CGColorMakeRed());
+   return( NO);
+}
+
+
+int  main( void)
+{
+   UIApplication    *app;
+   UIWindow         *window;
+   UIView           *view;
+   CGGraphicsLayer  *layer;
+
+   app = [UIApplication sharedInstance];
+
+   window = [UIWindow windowWithFrame:CGRectMake( 0.0, 0.0, 320.0, 320.0)
+                      titleUTF8String:"Demo"
+                            styleMask:UIWindowStyleMaskDefault];
+
+   layer = [CGGraphicsLayer layerWithFrame:CGRectMake( 10.0, 10.0, 300.0, 300.0)];
+   [layer setDrawCallback:draw];
+
+   view = [UIView viewWithLayer:layer];
+   [[window contentView] addSubview:view];
+
+   [app addWindow:window];
+   return( [app runApp]);
+}
+```
+
+The window drives the frame loop: it creates the layers and their `CGContext`s
+for you and calls each draw callback once per frame. Return `NO` from the
+callback to preempt the layer's own drawing, or `YES` to draw underneath it
+(see [MulleGraphics](//github.com/MulleUI/MulleGraphics)).
+
+## Build the demo
+
+The `demo/` folder is a [mulle-sde](//github.com/mulle-sde) project:
+
+``` sh
+cd demo
+mulle-sde craft
+```
 
 At the lowest level, MulleUI relies on an external library like GLFW or SDL2 to
 interface with the operating system and provide a graphics context. This
@@ -75,7 +141,8 @@ The UIWindow then calls its own receiveRetainedEvent: method, passing the new
 UIMouseButtonEvent object. This kicks off the event handling and propagation process.
 
 Inside receiveRetainedEvent:, the UIWindow checks if the event target is
-itself or if it should be propagated down to a subview.events like window resize.
+itself or if it should be propagated down to a subview. Events like window
+resize are handled by the window itself.
 For a mouse click, the UIWindow will likely return NO from willHandleEvent:
 indicating the event should be passed down the view hierarchy.
 
@@ -154,7 +221,7 @@ Install the requirements:
 
 | Requirements                                 | Description
 |----------------------------------------------|-----------------------
-| [MulleUIWindow](https://github.com/MulleUI/MulleUIWindow)             | 🛸 MulleUIWindow provides UIWindow and extends UIView functionality
+| [MulleUIWindow](https://github.com/MulleUI/MulleUIWindow)             | 🎪 MulleUIWindow provides UIWindow and extends UIView functionality
 | [MulleGraphics](https://github.com/MulleUI/MulleGraphics)             | 🌠 MulleGraphics provides CALayer subclasses
 | [mulle-objc-list](https://github.com/mulle-objc/mulle-objc-list)             | 📒 Lists mulle-objc runtime information contained in executables.
 

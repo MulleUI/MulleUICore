@@ -14,7 +14,7 @@
    dependencies =
    (
       {
-         description="🛸 MulleUIWindow provides UIWindow and extends UIView functionality";
+         description="🎪 MulleUIWindow provides UIWindow and extends UIView functionality";
          domain="github";
          name="MulleUIWindow";
          repo="MulleUIWindow";

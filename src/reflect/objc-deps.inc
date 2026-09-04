@@ -5,6 +5,7 @@
       { @selector( CGFramebuffer), @selector( UIFramebuffer) },      // ef762cef;CGFramebuffer;5c6483a1;UIFramebuffer
       { @selector( CGGraphicsLayer), @selector( UILayer) },      // 754a6374;CGGraphicsLayer;fcc9d94f;UILayer
       { @selector( CGImage), @selector( UIImage) },      // 6ec55940;CGImage;e1a7d20d;UIImage
+      { @selector( CGNullContext), @selector( UIWindow) },      // dd25c0db;CGNullContext;895a123f;UIWindow
       { @selector( UIView), @selector( CAShadowLayer) },      // 155b6ee8;UIView;8e87a8e1;CAShadowLayer
       { @selector( UIView), @selector( CGGraphicsLayer) },      // 155b6ee8;UIView;754a6374;CGGraphicsLayer
       { @selector( UIView), @selector( CGGraphicsLayerForwarding) },      // 155b6ee8;UIView;f83ce545;CGGraphicsLayerForwarding

@@ -20,7 +20,6 @@ int   main( int argc, char *argv[])
 {
    UIWindow        *window;
    UIApplication   *app;
-   UIWindowPlane   *contentPlane;
    CGRect          frame;
    UIView          *view;
    CATextLayer     *layer;

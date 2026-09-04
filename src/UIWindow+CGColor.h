@@ -1,8 +1,8 @@
 //
-//  UIWindow+CGColor.m
-//  MulleUIOS
+//  UIWindow+CGColor.h
+//  MulleUICore
 //
-//  Copyright (c) 2023 Nat! - Mulle kybernetiK.
+//  Copyright (c) 2026 Nat! - Mulle kybernetiK.
 //  All rights reserved.
 //
 //

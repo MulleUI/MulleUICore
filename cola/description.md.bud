@@ -1,23 +1,25 @@
-# MulleUI
-
-** TODO: move the code to other places use the name MulleUI to comprise
-** MulleUIImage, MulleUIVideo and MulleUIFoundation
-**
-
-#### 🌀 Fundamental UI for mulle-objc - Desktop and Mobile
-
-This library adds some convenience atop of MulleUIOS. It is the main starting
-point for developing MulleUI code without widgets and without the Foundation
-(which introduces NSString).
+This library combines MulleUIWindow (windows, views, events) with MulleGraphics
+(CALayer) into a single framework. It is the main starting point for developing
+MulleUI code without widgets and without the Foundation (which introduces
+NSString).
 
 With MulleUI you can
 
 * create windows with **UIWindow**
 * layout window contents with **UIView**
-* handle events as an **UIEvent** in your UIView
+* handle events as a **UIEvent** in your UIView
 * do drawings in your UIView with **CALayer**
 * animate your UIView or CALayer with **CAAnimation**
 
 MulleUI will utilize a platform specific drawing library variant of **nanovg**.
+
+For exact fills and strokes, see
+[MulleCG's pixel-perfect rectangles](//github.com/MulleUI/MulleCG#how-to-draw-pixel-perfect-rectangles).
+
+> #### Note
+>
+> MulleUICore includes MulleCA. Both MulleCA and MulleCG pull in the CGColor
+> typedef, so keep MulleGraphics before MulleUICore in your dependency list to
+> preserve the required order (see MulleCG's README).
 
 
