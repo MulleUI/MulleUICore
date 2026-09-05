@@ -35,6 +35,7 @@
 #import "import.h"
 
 
+MULLE_UI_CORE_GLOBAL
 int  UIApplicationRunDrawCallback( CGGraphicsLayerDrawCallback_t *callback,
                                    CGSize windowSize,
                                    CGSize canvasSize,

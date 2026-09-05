@@ -37,10 +37,8 @@
 #import "MulleUICore.h"
 
 
-int   __MULLE_UI_ranlib__;
 
-
-uint32_t   MulleUI_get_version( void)
+uint32_t   MulleUICore_get_version( void)
 {
-   return( MULLE_UI_VERSION);
+   return( MULLE_UI_CORE_VERSION);
 }

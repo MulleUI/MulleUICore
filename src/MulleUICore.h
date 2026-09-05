@@ -32,8 +32,6 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 //  POSSIBILITY OF SUCH DAMAGE.
 //
-#define MULLE_UI_CORE_VERSION  ((0UL << 20) | (1 << 8) | 0)
-
 #import "import.h"
 
 #include <stdint.h>
@@ -43,28 +41,29 @@
  *
  *  version:  major, minor, patch
  */
-#define MULLE_UI_VERSION  ((0 << 20) | (7 << 8) | 56)
+#define MULLE_UI_CORE_VERSION  ((0 << 20) | (1 << 8) | 0)
 
 
 static inline unsigned int   MulleUI_get_version_major( void)
 {
-   return( MULLE_UI_VERSION >> 20);
+   return( MULLE_UI_CORE_VERSION >> 20);
 }
 
 
 static inline unsigned int   MulleUI_get_version_minor( void)
 {
-   return( (MULLE_UI_VERSION >> 8) & 0xFFF);
+   return( (MULLE_UI_CORE_VERSION >> 8) & 0xFFF);
 }
 
 
 static inline unsigned int   MulleUI_get_version_patch( void)
 {
-   return( MULLE_UI_VERSION & 0xFF);
+   return( MULLE_UI_CORE_VERSION & 0xFF);
 }
 
 
-extern uint32_t   MulleUI_get_version( void);
+MULLE_UI_CORE_GLOBAL
+uint32_t   MulleUICore_get_version( void);
 
 /*
    Add your library headers here for exposure to library

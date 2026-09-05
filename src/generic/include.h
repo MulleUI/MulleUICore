@@ -63,16 +63,16 @@
 
 #include "_MulleUICore-include.h"
 
-#ifdef MULLE_UI_BUILD
-# define MULLE_UI_GLOBAL        MULLE_C_GLOBAL
-# define MULLE_UI_GLOBAL_VAR    MULLE_C_GLOBAL_VAR
+#ifdef MULLE_UI_CORE_BUILD
+# define MULLE_UI_CORE_GLOBAL        MULLE_C_GLOBAL
+# define MULLE_UI_CORE_GLOBAL_VAR    MULLE_C_GLOBAL_VAR
 #else
-# if defined( MULLE_UI_INCLUDE_DYNAMIC) || (defined( MULLE_INCLUDE_DYNAMIC) && ! defined( MULLE_UI_INCLUDE_STATIC))
-#  define MULLE_UI_GLOBAL       MULLE_C_EXTERN_GLOBAL
+# if defined( MULLE_UI_CORE_INCLUDE_DYNAMIC) || (defined( MULLE_INCLUDE_DYNAMIC) && ! defined( MULLE_UI_CORE_INCLUDE_STATIC))
+#  define MULLE_UI_CORE_GLOBAL       MULLE_C_EXTERN_GLOBAL
 # else
-#  define MULLE_UI_GLOBAL       extern
+#  define MULLE_UI_CORE_GLOBAL       extern
 # endif
-# define MULLE_UI_GLOBAL_VAR
+# define MULLE_UI_CORE_GLOBAL_VAR
 #endif
 
 
