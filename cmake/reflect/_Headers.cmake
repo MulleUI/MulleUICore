@@ -72,6 +72,5 @@ src/UIView+CGGraphicsLayer.h
 src/UIWindow+CGColor.h
 src/UIWindow+CGGraphicsLayer.h
 src/reflect/_MulleUICoreWidgetsBase-include-public.h
-src/reflect/_MulleUICore-versioncheck.h
 )
 
