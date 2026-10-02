@@ -41,7 +41,7 @@
  *
  *  version:  major, minor, patch
  */
-#define MULLE_UI_CORE_VERSION  ((0 << 20) | (1 << 8) | 0)
+#define MULLE_UI_CORE_VERSION  ((0UL << 20) | (1 << 8) | 1)
 
 
 static inline unsigned int   MulleUI_get_version_major( void)
