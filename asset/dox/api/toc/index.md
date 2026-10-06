@@ -65,7 +65,7 @@ Umbrella header providing version information. Includes all dependencies via
 #### Version Information
 
 ```c
-#define MULLE_UI_CORE_VERSION  ((0 << 20) | (1 << 8) | 0)
+#define MULLE_UI_CORE_VERSION  ((0UL << 20) | (1 << 8) | 1)
 
 static inline unsigned int   MulleUI_get_version_major( void);
 static inline unsigned int   MulleUI_get_version_minor( void);
@@ -76,7 +76,7 @@ uint32_t   MulleUICore_get_version( void);
 ```
 
 - `MULLE_UI_CORE_VERSION` — compile-time version of this library
-  (major 0, minor 1, patch 0); the `MulleUI_get_version_*()` inlines decode it
+  (major 0, minor 1, patch 1); the `MulleUI_get_version_*()` inlines decode it
 - `MulleUICore_get_version()` — runtime version as uint32_t, declared
   `MULLE_UI_CORE_GLOBAL` (import/export visibility from `include.h`)
 - `_major/_minor/_patch` — decoded version components of `MULLE_UI_CORE_VERSION`
