@@ -600,3 +600,10 @@ Transitively through MulleUIWindow and MulleGraphics, the following are
 also available: MulleObjC (runtime), mulle-core (foundational C libraries),
 MulleCG, MulleCA, MulleGLFW, mulle-gfx (nanovg integration), mulle-freetype,
 MulleThread, and others.
+
+For embedding without mulle-sde, the README documents a CMake subproject
+setup: add MulleUICore (and its many transitive dependency submodules) as
+git submodules, `add_subdirectory()` each of them, and
+`target_link_libraries( ${PROJECT_NAME} PUBLIC MulleUICore)`. Include the
+umbrella header via `<MulleUICore/MulleUICore.h>`. Alternatively use
+`mulle-sde add github:MulleUI/MulleUICore` as before.
